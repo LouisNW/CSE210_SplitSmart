@@ -1,4 +1,4 @@
-package com.example.sherrychuang.splitsmart;
+package com.example.sherrychuang.splitsmart.Activity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -6,11 +6,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.example.sherrychuang.splitsmart.R;
+
 /**
  * Created by sherrychuang on 11/15/16.
  */
 
-public class billPage extends Activity {
+public class BillPage extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -20,7 +22,7 @@ public class billPage extends Activity {
         Button btn= (Button) findViewById(R.id.ok);
         btn.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
-                Intent myIntent = new Intent(view.getContext(), eventPage.class);
+                Intent myIntent = new Intent(view.getContext(), EventPage.class);
                 startActivityForResult(myIntent,0);
             }
 
