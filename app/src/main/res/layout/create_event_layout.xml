@@ -43,20 +43,24 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/cancel"/>
+            android:id="@+id/cancel"
+            android:text="Cancel"/>
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/camera"/>
+            android:id="@+id/camera"
+            android:text="Camera"/>
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/gallery"/>
+            android:id="@+id/gallery"
+            android:text="Gallery"/>
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/manual"/>
+            android:id="@+id/manual"
+            android:text="Manual"/>
 
     </LinearLayout>
 </ScrollView>

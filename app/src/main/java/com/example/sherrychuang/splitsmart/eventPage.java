@@ -33,6 +33,8 @@ public class eventPage extends Activity {
             }
 
         });
+
+
     }
 
 }

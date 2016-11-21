@@ -36,7 +36,7 @@ public class createEvent extends Activity {
         });
 
         Button gallerybtn = (Button) findViewById(R.id.gallery);
-        camerabtn.setOnClickListener(new View.OnClickListener(){
+        gallerybtn.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
                 //TODO: launch gallery
             }
@@ -44,9 +44,10 @@ public class createEvent extends Activity {
         });
 
         Button manualbtn = (Button) findViewById(R.id.manual);
-        camerabtn.setOnClickListener(new View.OnClickListener(){
+        manualbtn.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
-                //TODO: enter manual edit page
+                Intent myIntent = new Intent(view.getContext(), billPage.class);
+                startActivityForResult(myIntent,0);
             }
 
         });
