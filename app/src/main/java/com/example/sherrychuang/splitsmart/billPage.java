@@ -10,11 +10,13 @@ import android.widget.Button;
  * Created by sherrychuang on 11/15/16.
  */
 
-public class billPage {public class eventPage extends Activity {
+public class billPage extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Intent intent = getIntent();
         setContentView(R.layout.bill_page_layout);
+
         Button btn= (Button) findViewById(R.id.ok);
         btn.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
@@ -27,4 +29,4 @@ public class billPage {public class eventPage extends Activity {
     }
 
 }
-}
+

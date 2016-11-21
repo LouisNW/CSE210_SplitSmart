@@ -15,6 +15,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".createEvent">
+
+        </activity>
+        <activity android:name=".eventPage">
+
+        </activity>
+        <activity android:name=".billPage">
+
+        </activity>
+        <activity android:name=".splitResult">
+
+        </activity>
     </application>
 
 </manifest>

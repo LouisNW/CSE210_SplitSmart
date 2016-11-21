@@ -14,6 +14,8 @@ public class splitResult extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Intent intent = getIntent();
+
         setContentView(R.layout.split_result_layout);
 
 

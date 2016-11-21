@@ -17,8 +17,8 @@ public class MainActivity extends AppCompatActivity {
         ImageButton addEvent= (ImageButton) findViewById(R.id.addEvent);
         addEvent.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
-                Intent myIntent = new Intent(view.getContext(), createEvent.class);
-                startActivityForResult(myIntent,0);
+                Intent myIntent = new Intent(MainActivity.this, createEvent.class);
+                MainActivity.this.startActivity(myIntent);
             }
 
         });

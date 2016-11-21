@@ -14,17 +14,19 @@ public class eventPage extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Intent intent = getIntent();
         setContentView(R.layout.event_page_layout);
+
         Button btn= (Button) findViewById(R.id.sampleBill);
         btn.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
-                Intent myIntent = new Intent(view.getContext(), billPage.class);
-                startActivityForResult(myIntent,0);
+                Intent myIntent = new Intent(eventPage.this, billPage.class);
+                eventPage.this.startActivity(myIntent);
             }
-
         });
+
         Button splitbtn= (Button) findViewById(R.id.split);
-        btn.setOnClickListener(new View.OnClickListener(){
+        splitbtn.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
                 Intent myIntent = new Intent(view.getContext(), splitResult.class);
                 startActivityForResult(myIntent,0);
