@@ -27,7 +27,8 @@ public class CreateEventPage extends Activity {
 
         });
 
-        //TODO: if you think 3 buttons looks too ugly, you can modify it to widget
+        //TODO: if you think 3 buttons looks too ugly, you can modify it to:
+        // click 'ok' button to launch widget with 3 options
         Button camerabtn = (Button) findViewById(R.id.camera);
         camerabtn.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
