@@ -1,4 +1,4 @@
-package com.example.sherrychuang.splitsmart.Manager;
+package com.example.sherrychuang.splitsmart.model;
 
 /**
  * Created by sherrychuang on 11/15/16.
