@@ -34,6 +34,9 @@
         <activity android:name=".Activity.SplitResultPage">
 
         </activity>
+        <activity android:name=".Activity.BillContentPage">
+
+        </activity>
     </application>
 
 </manifest>
