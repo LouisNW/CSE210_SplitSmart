@@ -19,12 +19,23 @@ android {
     }
 }
 
+buildscript {
+    repositories {
+        jcenter()
+    }
+}
+
+repositories {
+    jcenter()
+}
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     compile 'com.android.support:appcompat-v7:25.0.0'
+    compile 'com.thomashaertel:multispinner:0.1.1@aar'
     testCompile 'junit:junit:4.12'
     compile 'com.github.Cutta:TagView:1.3'
 }
