@@ -1,27 +1,24 @@
 package com.example.sherrychuang.splitsmart.data;
 
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * Created by sherrychuang on 11/15/16.
  */
 
-public class Bill implements Serializable {
+public class Person implements Serializable {
     private long id;
     private String name;
-    private long ownerID;
-    private double taxRate;
+    private String email;
     private long eventID;
 
-    public Bill(String name, long ownerID, double taxRate, long eventID) {
+    public Person(String name, String email, long eventID) {
         this.name = name;
-        this.ownerID = ownerID;
-        this.taxRate = taxRate;
+        this.email = email;
         this.eventID = eventID;
     }
 
-    public Bill() {
+    public Person() {
     }
 
     public long getId() {
@@ -40,20 +37,12 @@ public class Bill implements Serializable {
         this.name = name;
     }
 
-    public long getOwnerID() {
-        return ownerID;
+    public String getEmail() {
+        return email;
     }
 
-    public void setOwnerID(long ownerID) {
-        this.ownerID = ownerID;
-    }
-
-    public double getTaxRate() {
-        return taxRate;
-    }
-
-    public void setTaxRate(double taxRate) {
-        this.taxRate = taxRate;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public long getEventID() {
@@ -66,11 +55,10 @@ public class Bill implements Serializable {
 
     @Override
     public String toString() {
-        return "Bill{" +
+        return "Person{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", ownerID=" + ownerID +
-                ", taxRate=" + taxRate +
+                ", email='" + email + '\'' +
                 ", eventID=" + eventID +
                 '}';
     }
