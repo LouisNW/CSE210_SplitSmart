@@ -11,7 +11,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class SplitSmartDBHelper extends SQLiteOpenHelper {
     private final static String DATABASE_NAME = "splitSmart.db";
     private final static int DATABASE_VERSION = 1;
-    private static SQLiteDatabase database;
+    private static SQLiteDatabase database = null;
 
     public SplitSmartDBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -26,13 +26,30 @@ public class SplitSmartDBHelper extends SQLiteOpenHelper {
     }
 
     @Override
-    public void onCreate(SQLiteDatabase sqLiteDatabase) {
-
+    public void onConfigure(SQLiteDatabase db) {
+        super.onConfigure(db);
+        db.setForeignKeyConstraintsEnabled(true);
     }
+
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+        db.execSQL(EventDAO.CREATE_TABLE);
+        db.execSQL(PersonDAO.CREATE_TABLE);
+        db.execSQL(BillDAO.CREATE_TABLE);
+        db.execSQL(ItemDAO.CREATE_TABLE);
+        db.execSQL(BillPersonRelation.CREATE_TABLE);
+        db.execSQL(ItemPersonRelation.CREATE_TABLE);
+    }
+
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // Drop older table if existed, all data will be gone
-//        db.execSQL("DROP TABLE IF EXISTS " + ItemGPS.DATABASE_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + EventDAO.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + PersonDAO.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + BillDAO.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + ItemDAO.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + BillPersonRelation.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + ItemPersonRelation.TABLE_NAME);
         // Create tables again
         onCreate(db);
     }
