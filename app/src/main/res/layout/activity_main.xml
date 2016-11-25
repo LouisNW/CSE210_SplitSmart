@@ -20,6 +20,7 @@
             android:src="@drawable/plus"
             android:layout_alignParentRight="true"
             android:background="@null"
+            android:showAsAction = "always"
             />
         <ListView
             android:layout_width="fill_parent"
