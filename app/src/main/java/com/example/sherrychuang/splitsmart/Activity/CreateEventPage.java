@@ -18,6 +18,7 @@ public class CreateEventPage extends Activity {
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
         setContentView(R.layout.create_event_layout);
+
         Button cancelbtn = (Button) findViewById(R.id.cancel);
         cancelbtn.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){

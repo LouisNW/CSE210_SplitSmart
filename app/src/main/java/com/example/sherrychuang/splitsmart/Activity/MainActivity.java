@@ -15,7 +15,6 @@ import java.util.*;
 
 import com.example.sherrychuang.splitsmart.data.*;
 import com.example.sherrychuang.splitsmart.manager.*;
-
 import com.example.sherrychuang.splitsmart.R;
 
 public class MainActivity extends AppCompatActivity {
