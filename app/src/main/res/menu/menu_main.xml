@@ -7,5 +7,6 @@
         android:id="@+id/addEvent"
         android:icon="@android:drawable/ic_menu_add"
         android:title="ADD"
-        app:showAsAction="always" />
+        app:showAsAction="always"
+        android:onClick="clickMenuItem"/>
 </menu>

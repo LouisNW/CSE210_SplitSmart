@@ -12,16 +12,6 @@
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin">
 
-        <ImageButton
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:scaleType="fitCenter"
-            android:id="@+id/addEvent"
-            android:src="@drawable/plus"
-            android:layout_alignParentRight="true"
-            android:background="@null"
-            android:showAsAction = "always"
-            />
         <ListView
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
