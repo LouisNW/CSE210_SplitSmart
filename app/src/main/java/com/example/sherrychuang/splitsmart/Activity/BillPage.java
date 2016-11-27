@@ -1,6 +1,7 @@
 package com.example.sherrychuang.splitsmart.Activity;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -60,7 +61,9 @@ public class BillPage extends Activity {
             public void onClick(DialogInterface dialog, int which) {
                 String billName = etBillName.getText().toString();
                 String ownerName = spinner.getSelectedItem().toString();
-                Toast.makeText(getBaseContext(), "Bill Name: " +  billName + " Owner: " + ownerName, Toast.LENGTH_SHORT).show();
+                Intent i  = new Intent(((Dialog)dialog).getContext(), BillContentPage.class);
+                startActivity(i);
+                //Toast.makeText(getBaseContext(), "Bill Name: " +  billName + " Owner: " + ownerName, Toast.LENGTH_SHORT).show();
             }
         });
 
