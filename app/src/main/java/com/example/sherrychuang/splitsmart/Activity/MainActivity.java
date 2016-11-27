@@ -16,29 +16,37 @@ import java.util.*;
 import com.example.sherrychuang.splitsmart.data.*;
 import com.example.sherrychuang.splitsmart.manager.*;
 import com.example.sherrychuang.splitsmart.R;
+import com.example.sherrychuang.splitsmart.model.DatabaseTest;
+
+/**
+ * Modified by Chiao Fu on 11/27/16.
+ */
 
 public class MainActivity extends AppCompatActivity {
-    private ListView event_list_view;
+    private ListView eventListView;
     private ArrayAdapter adapter;
     private List<Event> events;
-    private String[] events_name;
+    private List<String> eventsName;
+    private EventManager eventManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        event_list_view = (ListView) findViewById(R.id.event_list);
-        EventManager eventManager = ManagerFactory.getEventManager(this);
+//        new DatabaseTest(getApplicationContext()).run();
+
+        eventListView = (ListView) findViewById(R.id.event_list);
+        eventManager = ManagerFactory.getEventManager(this);
         events = eventManager.getAllEvents();
-        events_name = new String[events.size()];
+        eventsName = new ArrayList<String>();
         for(int i = 0; i < events.size(); i++) {
-            events_name[i] = events.get(i).getName();
+            eventsName.add(events.get(i).getName());
         }
 
-        adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, events_name);
-        event_list_view.setAdapter(adapter);
-        registerForContextMenu(event_list_view);
-        event_list_view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, eventsName);
+        eventListView.setAdapter(adapter);
+        registerForContextMenu(eventListView);
+        eventListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 CharSequence text = Integer.toString(i);
@@ -47,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-//        event_list_view.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+//        eventListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 //            @Override
 //            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
 //                CharSequence text = list_events[i];
@@ -71,18 +79,36 @@ public class MainActivity extends AppCompatActivity {
 //            public void onClick(View view){
 //                Intent myIntent = new Intent(view.getContext(), EventPage.class);
 //                startActivityForResult(myIntent,0);
-//            }
+//            }........./
 //
 //        });
     }
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         if (v.getId() == R.id.event_list) {
             AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-            menu.setHeaderTitle(events_name[info.position]);
-            menu.add("Edit");
-            menu.add("Delete");
+            menu.setHeaderTitle(eventsName.get(info.position));
+            menu.add(Menu.NONE, 0, Menu.NONE, "Edit");
+            menu.add(Menu.NONE, 1, Menu.NONE, "Delete");
         }
     }
+    public boolean onContextItemSelected(MenuItem menuItem) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)menuItem.getMenuInfo();
+        int menuItemIndex = menuItem.getItemId();
+        if (menuItemIndex == 0) {
+            // choose "Edit"
+            Toast toast = Toast.makeText(getApplicationContext(), Integer.toString(menuItemIndex), Toast.LENGTH_SHORT);
+            toast.show();
+        }
+        else {
+            // choose "Delete"
+            eventManager.deleteEvent(events.get(info.position).getId());
+            adapter.remove(adapter.getItem(info.position));
+            Toast toast = Toast.makeText(getApplicationContext(), "deleted" + Integer.toString(info.position), Toast.LENGTH_SHORT);
+            toast.show();
+        }
+        return true;
+    }
+
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
