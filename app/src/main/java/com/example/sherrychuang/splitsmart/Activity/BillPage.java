@@ -35,6 +35,13 @@ public class BillPage extends Activity {
         //Disallow cancel of AlertDialog on click of back button and outside touch
         alert.setCancelable(false);
 
+        String[] items = new String[] {"Alice", "Jenny", "Louis", "Jeff", "Sherry", "Aaron", "Chiao", "Ning", "Chia-i"};
+        //Use a Spinner to select one value from items
+        final Spinner spinner = (Spinner) alertLayout.findViewById(R.id.spinner1);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(BillPage.this, android.R.layout.simple_spinner_item,items);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+
         //Set a button for cancel
         alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
 
@@ -52,16 +59,10 @@ public class BillPage extends Activity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 String billName = etBillName.getText().toString();
-                Toast.makeText(getBaseContext(), "Bill Name: " +  billName + " Owner: " + "?", Toast.LENGTH_SHORT).show();
+                String ownerName = spinner.getSelectedItem().toString();
+                Toast.makeText(getBaseContext(), "Bill Name: " +  billName + " Owner: " + ownerName, Toast.LENGTH_SHORT).show();
             }
         });
-
-        String[] items = new String[] {"Alice", "Jenny", "Louis", "Jeff", "Sherry", "Aaron", "Chiao", "Ning", "Chia-i"};
-        //Use a Spinner to select one value from items
-        final Spinner spinner = (Spinner) alertLayout.findViewById(R.id.spinner1);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(BillPage.this, android.R.layout.simple_spinner_item,items);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
 
         //Set the view from XML inside AlertDialog
         alert.setView(alertLayout);
