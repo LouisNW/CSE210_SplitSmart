@@ -1,84 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
-    android:padding="15dp">
-
-    <LinearLayout
-        android:layout_width="match_parent"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+    <Button
+        android:id="@+id/addBtn"
+        android:text="Add New Item"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:onClick="addItems"/>
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight=".2"
-            android:layout_marginLeft="10sp"
-            android:layout_gravity="center"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:text="Tax" />
-
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight=".5"
-            android:layout_marginLeft="15sp"
-            android:layout_gravity="center"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:text="Item" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight=".4"
-            android:layout_marginLeft="15sp"
-            android:layout_gravity="center"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:text="Price" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
-
-        <CheckBox android:id="@+id/taxCheckbox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.09"
-            android:layout_marginLeft="10sp"
-            android:layout_gravity="center"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:onClick="onCheckboxClicked"/>
-
-        <EditText
-            android:id="@+id/itemName"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight=".5"
-            android:layout_marginLeft="15sp"
-            android:layout_gravity="center"
-            android:textSize="16sp"
-            android:imeOptions="actionDone" />
-
-        <EditText
-            android:id="@+id/priceValue"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight=".4"
-            android:layout_marginLeft="15sp"
-            android:layout_gravity="center"
-            android:textSize="16sp"
-            android:imeOptions="actionDone" />
-    </LinearLayout>
-
+    <ListView
+        android:id="@android:id/list"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:drawSelectorOnTop="false"
+        />
 </LinearLayout>
