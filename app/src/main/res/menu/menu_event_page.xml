@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".BillPage">
+    <item
+        android:id="@+id/addBill"
+        android:icon="@drawable/ic_playlist_add_black_24dp"
+        android:title="add_bill"
+        app:showAsAction="always"
+        android:onClick="clickMenuItem"
+        />
+    <item
+        android:id="@+id/addPerson"
+        android:icon="@drawable/ic_person_add_black_24dp"
+        android:title="add_person"
+        app:showAsAction="always"
+        android:onClick="clickMenuItem"
+        />
+</menu>

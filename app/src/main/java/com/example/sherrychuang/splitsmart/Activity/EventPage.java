@@ -1,13 +1,17 @@
 package com.example.sherrychuang.splitsmart.Activity;
 
-import android.app.Activity;
+
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import java.util.List;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.sherrychuang.splitsmart.R;
@@ -20,7 +24,7 @@ import java.util.ArrayList;
  * Created by sherrychuang on 11/15/16.
  */
 
-public class EventPage extends Activity {
+public class EventPage extends AppCompatActivity {
     private ListView billListView;
     private ArrayAdapter adapter;
     private List<Bill> bills;
@@ -31,9 +35,15 @@ public class EventPage extends Activity {
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
         setContentView(R.layout.event_page_layout);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        Event event = (Event)getIntent().getSerializableExtra("Event");
-        System.out.println(event.getName());
+        Event event = (Event)intent.getSerializableExtra("Event");
+        TextView description = (TextView)findViewById(R.id.description);
+        String text = event.getStartDate().getMonth() + "/" + event.getStartDate().getDay() + " - " +
+                      event.getEndDate().getMonth() + "/" + event.getEndDate().getDay();
+        description.setText(text);
+
+        getSupportActionBar().setTitle(event.getName());
         billListView = (ListView) findViewById(R.id.bill_list);
         billManager = ManagerFactory.getBillManager(this);
         bills = billManager.getAllBillsOfEvent(event.getId());
@@ -54,6 +64,29 @@ public class EventPage extends Activity {
                 return;
             }
         });
+    }
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_event_page, menu);
+        return true;
+    }
+    public void clickMenuItem(MenuItem item) {
+        int itemId = item.getItemId();
+        if (itemId == R.id.addBill) {
+
+        }
+        else if (itemId == R.id.addPerson) {
+
+        }
+        return;
+    }
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
 }
