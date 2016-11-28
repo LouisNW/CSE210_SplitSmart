@@ -55,33 +55,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-//        eventListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-//            @Override
-//            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                CharSequence text = list_events[i];
-//                Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
-//                toast.show();
-//                return true;
-//            }
-//        });
-
-//        ImageButton addEvent= (ImageButton) findViewById(R.id.addEvent);
-//        addEvent.setOnClickListener(new View.OnClickListener(){
-//            public void onClick(View view){
-//                Intent myIntent = new Intent(MainActivity.this, CreateEventPage.class);
-//                MainActivity.this.startActivity(myIntent);
-//            }
-//
-//        });
-
-//        Button btn= (Button) findViewById(R.id.sampleEvent);
-//        btn.setOnClickListener(new View.OnClickListener(){
-//            public void onClick(View view){
-//                Intent myIntent = new Intent(view.getContext(), EventPage.class);
-//                startActivityForResult(myIntent,0);
-//            }........./
-//
-//        });
     }
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         if (v.getId() == R.id.event_list) {
@@ -96,14 +69,17 @@ public class MainActivity extends AppCompatActivity {
         int menuItemIndex = menuItem.getItemId();
         if (menuItemIndex == 0) {
             // choose "Edit"
-            Toast toast = Toast.makeText(getApplicationContext(), Integer.toString(menuItemIndex), Toast.LENGTH_SHORT);
-            toast.show();
+            Intent myIntent = new Intent(MainActivity.this, EditEventPage.class);
+            myIntent.putExtra("Event", events.get(info.position));
+            MainActivity.this.startActivity(myIntent);
+//            Toast toast = Toast.makeText(getApplicationContext(), Integer.toString(menuItemIndex), Toast.LENGTH_SHORT);
+//            toast.show();
         }
         else {
             // choose "Delete"
             eventManager.deleteEvent(events.get(info.position).getId());
             adapter.remove(adapter.getItem(info.position));
-            Toast toast = Toast.makeText(getApplicationContext(), "deleted" + Integer.toString(info.position), Toast.LENGTH_SHORT);
+            Toast toast = Toast.makeText(getApplicationContext(), "deleted " + Integer.toString(info.position), Toast.LENGTH_SHORT);
             toast.show();
         }
         return true;
@@ -121,4 +97,5 @@ public class MainActivity extends AppCompatActivity {
         }
         return;
     }
+
 }

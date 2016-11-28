@@ -19,6 +19,12 @@
         <activity android:name=".Activity.CreateEventPage">
 
         </activity>
+        <activity android:name=".Activity.EditEventPage">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Activity.MainActivity" />
+
+        </activity>
         <activity android:name=".Activity.EventPage">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
