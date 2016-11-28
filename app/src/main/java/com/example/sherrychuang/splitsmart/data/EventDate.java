@@ -1,10 +1,12 @@
 package com.example.sherrychuang.splitsmart.data;
 
+import java.io.Serializable;
+
 /**
  * Created by Louis on 11/22/16.
  */
 
-public class EventDate {
+public class EventDate implements Serializable{
     private int month;
     private int day;
 

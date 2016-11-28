@@ -49,9 +49,9 @@ public class MainActivity extends AppCompatActivity {
         eventListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                CharSequence text = Integer.toString(i);
-                Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
-                toast.show();
+                Intent myIntent = new Intent(MainActivity.this, EventPage.class);
+                myIntent.putExtra("Event", events.get(i));
+                MainActivity.this.startActivity(myIntent);
             }
         });
 
