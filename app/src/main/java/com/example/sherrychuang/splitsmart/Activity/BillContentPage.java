@@ -29,8 +29,6 @@ public class BillContentPage extends AppCompatActivity {
 
         listView.setAdapter(adapter);
 
-        listView.setAdapter(adapter);
-
         ItemTest newItem = new ItemTest(true, "Apple", "1");
         adapter.add(newItem);
     }
