@@ -39,6 +39,14 @@
         android:layout_below="@+id/tax_title"
         android:padding="15dp"
         android:text=" Owner :" />
+    <Spinner
+        android:id="@+id/owner"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/owner_title"
+        android:layout_below="@+id/tax_rate"
+        android:padding="20dp"
+        />
     <LinearLayout
         style="?android:attr/buttonBarStyle"
         android:layout_width="match_parent"

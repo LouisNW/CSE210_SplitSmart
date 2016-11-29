@@ -66,7 +66,7 @@ public class EventPage extends AppCompatActivity {
         billListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                CharSequence text = billsName.get(i);
+                CharSequence text = personManager.getPerson(bills.get(i).getOwnerID()).getName();
                 Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
                 toast.show();
                 return;

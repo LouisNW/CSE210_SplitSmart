@@ -6,9 +6,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.ArrayAdapter;
 import android.view.WindowManager;
 
 import java.util.List;
+import java.util.ArrayList;
+
 
 import com.example.sherrychuang.splitsmart.R;
 import com.example.sherrychuang.splitsmart.data.*;
@@ -22,9 +26,11 @@ import com.example.sherrychuang.splitsmart.manager.ManagerFactory;
 public class EditBillPage extends Activity{
     private EventManager eventManager;
     private BillManager billManager;
+    private PersonManager personManager;
     private Event event;
     private Bill bill;
     private List<Person> p_list;
+    private Spinner spinner;
 
     private EditText billNameView;
     private EditText taxRateView;
@@ -39,38 +45,55 @@ public class EditBillPage extends Activity{
         bill = (Bill) intent.getSerializableExtra("Bill");
 
         billNameView = (EditText) findViewById(R.id.bill_name);
-        taxRateView = (EditText) findViewById(R.id.tax_rate);
-
         billNameView.setText(bill.getName());
+        taxRateView = (EditText) findViewById(R.id.tax_rate);
         taxRateView.setText(String.valueOf(bill.getTaxRate()));
 
         eventManager = ManagerFactory.getEventManager(this);
         billManager = ManagerFactory.getBillManager(this);
+        personManager = ManagerFactory.getPersonManager(this);
+        p_list = personManager.getAllPersonsOfEvent(event.getId());
+        ArrayList<String> spinnerArray = new ArrayList<>();
+        int owner_index = 0;
+        for(int i = 0; i < p_list.size(); i++) {
+            if (p_list.get(i) == personManager.getPerson(bill.getOwnerID())) {
+                spinner.setSelection(i);
+            }
+            spinnerArray.add(p_list.get(i).getName());
+            System.out.println(owner_index);
+            spinner = (Spinner) findViewById(R.id.owner);
+            ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, spinnerArray);
+            spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinner.setSelection(owner_index);
+            spinner.setAdapter(spinnerArrayAdapter);
 
-
-        Button okButton = (Button) findViewById(R.id.ok);
-        okButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                String billName = billNameView.getText().toString();
-                String taxRate = taxRateView.getText().toString();
-                if (!billName.isEmpty() && !taxRate.isEmpty()) {
-                    bill.setName(billName);
-                    bill.setTaxRate(Double.parseDouble(taxRate));
-                    billManager.updateBill(bill);
+            Button okButton = (Button) findViewById(R.id.ok);
+            okButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View view) {
+                    String billName = billNameView.getText().toString();
+                    String taxRate = taxRateView.getText().toString();
+                    long owner_id = p_list.get(spinner.getSelectedItemPosition()).getId();
+                    if (!billName.isEmpty() && !taxRate.isEmpty()) {
+                        bill.setName(billName);
+                        bill.setTaxRate(Double.parseDouble(taxRate));
+                        bill.setOwnerID(owner_id);
+                        billManager.updateBill(bill);
+                    }
+                    System.out.println(bill.getOwnerID());
+                    Intent myIntent = new Intent(view.getContext(), EventPage.class);
+                    myIntent.putExtra("Event", event);
+                    startActivityForResult(myIntent, 0);
                 }
-                Intent myIntent = new Intent(view.getContext(), EventPage.class);
-                myIntent.putExtra("Event", event);
-                startActivityForResult(myIntent, 0);
-            }
-        });
+            });
 
-        Button cancelButton = (Button) findViewById(R.id.cancel);
-        cancelButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                Intent myIntent = new Intent(view.getContext(), EventPage.class);
-                myIntent.putExtra("Event", event);
-                startActivityForResult(myIntent, 0);
-            }
-        });
+            Button cancelButton = (Button) findViewById(R.id.cancel);
+            cancelButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View view) {
+                    Intent myIntent = new Intent(view.getContext(), EventPage.class);
+                    myIntent.putExtra("Event", event);
+                    startActivityForResult(myIntent, 0);
+                }
+            });
+        }
     }
 }
