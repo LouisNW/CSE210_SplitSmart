@@ -78,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
         else {
             // choose "Delete"
             eventManager.deleteEvent(events.get(info.position).getId());
+            events.remove(events.get(info.position));
             adapter.remove(adapter.getItem(info.position));
             Toast toast = Toast.makeText(getApplicationContext(), "deleted " + Integer.toString(info.position), Toast.LENGTH_SHORT);
             toast.show();

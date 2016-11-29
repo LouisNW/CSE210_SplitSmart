@@ -31,8 +31,9 @@
                 android:value=".Activity.MainActivity" />
 
         </activity>
+        <activity android:name=".Activity.EditBillPage">
+        </activity>
         <activity android:name=".Activity.BillPage">
-
         </activity>
         <activity android:name=".Activity.SplitResultPage">
 

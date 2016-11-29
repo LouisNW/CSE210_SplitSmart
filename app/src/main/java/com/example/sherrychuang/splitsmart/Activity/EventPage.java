@@ -1,9 +1,9 @@
 package com.example.sherrychuang.splitsmart.Activity;
 
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,6 +13,8 @@ import java.util.List;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.content.DialogInterface;
+import android.app.AlertDialog;
 
 import com.example.sherrychuang.splitsmart.R;
 import com.example.sherrychuang.splitsmart.data.*;
@@ -30,6 +32,9 @@ public class EventPage extends AppCompatActivity {
     private List<Bill> bills;
     private List<String> billsName;
     private BillManager billManager;
+    private PersonManager personManager;
+    private List<Person> people;
+    private Event event;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,14 +42,17 @@ public class EventPage extends AppCompatActivity {
         setContentView(R.layout.event_page_layout);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        Event event = (Event)intent.getSerializableExtra("Event");
+        event = (Event)intent.getSerializableExtra("Event");
         TextView description = (TextView)findViewById(R.id.description);
-        String text = event.getStartDate().getMonth() + "/" + event.getStartDate().getDay() + " - " +
-                      event.getEndDate().getMonth() + "/" + event.getEndDate().getDay();
+        String text = "Date  : " + event.getStartDate().getMonth() + "/" + event.getStartDate().getDay() + " - " +
+                      event.getEndDate().getMonth() + "/" + event.getEndDate().getDay() + "\n";
+
         description.setText(text);
 
         getSupportActionBar().setTitle(event.getName());
         billListView = (ListView) findViewById(R.id.bill_list);
+        personManager = ManagerFactory.getPersonManager(this);
+        people = personManager.getAllPersonsOfEvent(event.getId());
         billManager = ManagerFactory.getBillManager(this);
         bills = billManager.getAllBillsOfEvent(event.getId());
         billsName = new ArrayList<>();
@@ -72,22 +80,71 @@ public class EventPage extends AppCompatActivity {
     public void clickMenuItem(MenuItem item) {
         int itemId = item.getItemId();
         if (itemId == R.id.addBill) {
+            final CharSequence[] items = {"Camera", "Gallery", "Manual", "Cancel"};
 
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setItems(items, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int i) {
+                    if (items[i].equals("Camera")) {
+                        // Go to Camera
+                        Toast toast = Toast.makeText(getApplicationContext(), items[i], Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
+                    else if (items[i].equals("Gallery")) {
+                        // Go to gallery
+                        Toast toast = Toast.makeText(getApplicationContext(), items[i], Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
+                    else if (items[i].equals("Manual")) {
+                        // manually input
+                        Toast toast = Toast.makeText(getApplicationContext(), items[i], Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
+                    else if (items[i].equals("Cancel")) {
+                        dialog.dismiss();
+                    }
+                }
+            });
+            builder.show();
         }
         else if (itemId == R.id.addPerson) {
-
+            String pName = "";
+            for(int i = 0; i < people.size(); i++) {
+                pName = pName + people.get(i).getName() + " ";
+            }
+        }
+        else if (itemId == android.R.id.home) {
+            Intent myIntent = new Intent(EventPage.this, MainActivity.class);
+            EventPage.this.startActivity(myIntent);
         }
         return;
     }
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                onBackPressed();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        if (v.getId() == R.id.bill_list) {
+            AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+            menu.setHeaderTitle(billsName.get(info.position));
+            menu.add(Menu.NONE, 0, Menu.NONE, "Edit");
+            menu.add(Menu.NONE, 1, Menu.NONE, "Delete");
         }
     }
-
+    public boolean onContextItemSelected(MenuItem menuItem) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)menuItem.getMenuInfo();
+        int menuItemIndex = menuItem.getItemId();
+        if (menuItemIndex == 0) {
+            // choose "Edit"
+            Intent myIntent = new Intent(EventPage.this, EditBillPage.class);
+            myIntent.putExtra("Event", event);
+            myIntent.putExtra("Bill", bills.get(info.position));
+            EventPage.this.startActivity(myIntent);
+        }
+        else {
+            // choose "Delete"
+            billManager.deleteBill(bills.get(info.position).getId());
+            bills.remove(bills.get(info.position));
+            adapter.remove(adapter.getItem(info.position));
+            Toast toast = Toast.makeText(getApplicationContext(), "deleted " + Integer.toString(info.position), Toast.LENGTH_SHORT);
+            toast.show();
+        }
+        return true;
+    }
 }
-
