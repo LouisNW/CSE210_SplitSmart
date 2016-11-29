@@ -1,16 +1,7 @@
 package com.example.sherrychuang.splitsmart.Activity;
 
-import android.app.Activity;
-import android.app.ListActivity;
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.view.LayoutInflater;
-import android.widget.EditText;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.widget.Spinner;
-import android.widget.ArrayAdapter;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.ListView;
 import java.util.ArrayList;
 
@@ -20,7 +11,7 @@ import com.example.sherrychuang.splitsmart.R;
  * Created by sherrychuang on 11/15/16.
  */
 
-public class BillContentPage extends ListActivity{
+public class BillContentPage extends AppCompatActivity {
     //LIST OF ARRAY STRINGS WHICH WILL SERVE AS LIST ITEMS
     ArrayList<ItemTest> listItems = new ArrayList<ItemTest>();
 
@@ -34,7 +25,7 @@ public class BillContentPage extends ListActivity{
 
         adapter=new CustAdapter(this, listItems);
         ListView listView = (ListView) findViewById(android.R.id.list);
-        setListAdapter(adapter);
+        listView.setAdapter(adapter);
 
         ItemTest newItem = new ItemTest(true, "Apple", "1");
         adapter.add(newItem);
