@@ -3,21 +3,20 @@ package com.example.sherrychuang.splitsmart.Activity;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.GridView;
 import android.widget.ImageButton;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.cunoraz.tagview.Tag;
+import com.cunoraz.tagview.TagView;
 import com.example.sherrychuang.splitsmart.R;
 import com.example.sherrychuang.splitsmart.data.Event;
 import com.example.sherrychuang.splitsmart.data.EventDate;
@@ -25,8 +24,6 @@ import com.example.sherrychuang.splitsmart.data.Person;
 import com.example.sherrychuang.splitsmart.manager.EventManager;
 import com.example.sherrychuang.splitsmart.manager.ManagerFactory;
 import com.example.sherrychuang.splitsmart.manager.PersonManager;
-
-//import org.apmem.tools.layouts.FlowLayout;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -48,9 +45,7 @@ public class CreateEventPage extends Activity {
     private TextView endDateView;
     private EditText personNameView;
     private EditText personEmailView;
-//    private FlowLayout peopleView;
-//    private ListView peopleView;
-//    private ArrayAdapter adapter;
+    private TagView peopleView;
 
     private Calendar calendar;
     private DatePickerDialog.OnDateSetListener startDatePickListener = new DatePickerDialog.OnDateSetListener() {
@@ -70,8 +65,8 @@ public class CreateEventPage extends Activity {
         }
     };
 
-    private List<String> friendsName;
-    private List<String> friendsEmail;
+    private List<String> peopleName;
+    private List<String> peopleEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,13 +76,16 @@ public class CreateEventPage extends Activity {
         eventNameView = (EditText) findViewById(R.id.event_name);
         startDateView = (TextView) findViewById(R.id.start_date);
         endDateView = (TextView) findViewById(R.id.end_date);
-//        peopleView = (ListView) findViewById(R.id.people_list);
-//        peopleView = (FlowLayout) findViewById(R.id.people_list);
-//        peopleView.a
-
-        eventManager = ManagerFactory.getEventManager(this);
-        personManager = ManagerFactory.getPersonManager(this);
-
+        peopleView = (TagView) findViewById(R.id.people);
+        peopleView.setOnTagDeleteListener(new TagView.OnTagDeleteListener() {
+            @Override
+            public void onTagDeleted(final TagView view, final Tag tag, final int position) {
+                view.remove(position);
+                peopleName.remove(position);
+                peopleEmail.remove(position);
+                Toast.makeText(getApplicationContext(), "#people " + Integer.toString(peopleName.size()), Toast.LENGTH_SHORT).show();
+            }
+        });
 
         // default show date of today
         calendar = Calendar.getInstance();
@@ -111,11 +109,14 @@ public class CreateEventPage extends Activity {
                 Toast.makeText(getApplicationContext(), "end", Toast.LENGTH_SHORT).show();
             }
         });
+
         startDate = new EventDate(month, day);
         endDate = new EventDate(month, day);
+        peopleName = new ArrayList<String>();
+        peopleEmail = new ArrayList<String>();
 
-        friendsName = new ArrayList<String>();
-        friendsEmail = new ArrayList<String>();
+        eventManager = ManagerFactory.getEventManager(this);
+        personManager = ManagerFactory.getPersonManager(this);
 
         ImageButton addFriendButton = (ImageButton) findViewById(R.id.add_person);
         addFriendButton.setOnClickListener(new View.OnClickListener(){
@@ -136,13 +137,19 @@ public class CreateEventPage extends Activity {
                 Button okButton = (Button) layout.findViewById(R.id.ok);
                 okButton.setOnClickListener(new View.OnClickListener(){
                     public void onClick(View view){
-                        Toast.makeText(getApplicationContext(), "add friend " + Integer.toString(friendsName.size()), Toast.LENGTH_SHORT).show();
                         String tempName = personNameView.getText().toString();
                         String tempEmail = personEmailView.getText().toString();
                         if (tempName.length() > 0 && tempEmail.length() > 0) {
-                            friendsName.add(personNameView.getText().toString());
-                            friendsEmail.add(personEmailView.getText().toString());
+                            // add a new tag in page
+                            Tag tempTag = new Tag(tempName);
+                            tempTag.layoutColor = Color.GRAY;
+                            tempTag.isDeletable = true;
+                            peopleView.addTag(tempTag);
+                            // add person into array
+                            peopleName.add(personNameView.getText().toString());
+                            peopleEmail.add(personEmailView.getText().toString());
                         }
+                        Toast.makeText(getApplicationContext(), "#friend " + Integer.toString(peopleName.size()), Toast.LENGTH_SHORT).show();
                         alertDialog.dismiss();
                     }
                 });
@@ -168,8 +175,8 @@ public class CreateEventPage extends Activity {
                 eventManager.insertEvent(event);
 
                 // create people
-                for(int i = 0; i < friendsName.size(); i++) {
-                    personManager.insertPerson(new Person(friendsName.get(i), friendsEmail.get(i), event.getId()));
+                for(int i = 0; i < peopleName.size(); i++) {
+                    personManager.insertPerson(new Person(peopleName.get(i), peopleEmail.get(i), event.getId()));
                 }
 
                 Intent myIntent = new Intent(view.getContext(), MainActivity.class);
