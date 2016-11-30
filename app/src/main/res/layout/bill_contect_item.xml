@@ -16,30 +16,30 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight=".2"
-            android:layout_marginLeft="10sp"
+            android:layout_marginLeft="9sp"
             android:layout_gravity="center"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:textStyle="bold"
             android:text="Tax" />
 
 
         <TextView
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight=".5"
             android:layout_marginLeft="15sp"
             android:layout_gravity="center"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:textStyle="bold"
             android:text="Item" />
 
         <TextView
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0.42"
             android:layout_marginLeft="15sp"
             android:layout_gravity="center"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:textStyle="bold"
             android:text="Price" />
     </LinearLayout>
@@ -54,46 +54,75 @@
         <CheckBox android:id="@+id/TaxCheckbox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="0.09"
-            android:layout_marginLeft="10sp"
+            android:layout_weight="0.01"
+            android:layout_marginLeft="5sp"
             android:layout_gravity="center"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:textStyle="bold"
             android:focusable="false"
             android:focusableInTouchMode="false" />
 
         <EditText
             android:id="@+id/ItemName"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_weight=".5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.05"
             android:layout_marginLeft="15sp"
             android:inputType="text"
             android:maxLines="1"
             android:layout_gravity="center"
             android:hint="Item"
-            android:textSize="16sp" />
+            android:textSize="14sp" />
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="15sp"
             android:layout_gravity="center"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:textStyle="bold"
             android:text="$" />
 
         <EditText
             android:id="@+id/ItemPrice"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_weight=".4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.05"
             android:layout_marginLeft="15sp"
             android:inputType="text"
             android:maxLines="1"
             android:layout_gravity="center"
             android:hint="Price"
-            android:textSize="16sp"/>
+            android:textSize="14sp"/>
         </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            style="?android:attr/spinnerItemStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:text="Shared by:"/>
+
+        <Spinner
+            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_weight="0.83"
+            android:id="@+id/spinner2"
+            android:spinnerMode="dropdown" />
+
+        <Button
+            android:id="@+id/deleteBtn"
+            android:text="Delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50sp"/>
+    </LinearLayout>
 </LinearLayout>

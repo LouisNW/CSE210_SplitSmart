@@ -10,12 +10,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.Toast;
+
 
 import com.example.sherrychuang.splitsmart.R;
 
@@ -40,7 +43,7 @@ public class BillContentPage extends AppCompatActivity {
         myAdapter = new BillAdapter();
         myList.setAdapter(myAdapter);
 
-        //Add a bill_contect_item manually
+        //Add a bill_content_item manually
         final Button addButton = (Button) findViewById(R.id.addBtn);
         addButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
@@ -55,6 +58,7 @@ public class BillContentPage extends AppCompatActivity {
                 });
             }
         });
+
 
         //Click save button
         final Button save = (Button) findViewById(R.id.setup_macroSavebtn);
@@ -119,6 +123,14 @@ public class BillContentPage extends AppCompatActivity {
             } else {
                 holder = (ViewHolder) convertView.getTag();
             }
+
+            //Mock People
+            String[] items = new String[] {"Alice", "Jenny", "Louis", "Jeff", "Sherry", "Aaron", "Chiao", "Ning", "Chia-i"};
+            //Use a Spinner to select one value from items
+            final Spinner spinner = (Spinner) convertView.findViewById(R.id.spinner2);
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(BillContentPage.this, android.R.layout.simple_spinner_item,items);
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinner.setAdapter(adapter);
 
             //Fill EditText with the value you have in data source
             ItemInput myThisItem = myItems.get(position);
