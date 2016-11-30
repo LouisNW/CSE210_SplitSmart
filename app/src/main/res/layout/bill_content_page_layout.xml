@@ -41,7 +41,7 @@
                 android:text="Tax:" />
 
             <EditText
-                android:id="@+id/ItemName"
+                android:id="@+id/ItemTax"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight=".5"

@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 
 import com.example.sherrychuang.splitsmart.R;
+import com.thomashaertel.widget.MultiSpinner;
 
 /**
  * Modified by jenny on 11/29/16.
@@ -30,6 +31,10 @@ public class BillContentPage extends AppCompatActivity {
     private ListView myList;
     private BillAdapter myAdapter;
     private ArrayList<ItemInput> myItems;
+    private MultiSpinner spinner;
+    private ArrayAdapter<String> adapter;
+    private String[] peopleList;
+    private String taxRateBill;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -64,13 +69,19 @@ public class BillContentPage extends AppCompatActivity {
         final Button save = (Button) findViewById(R.id.setup_macroSavebtn);
         save.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
-                for(int i = 0; i < myItems.size(); i++){
+                for(ItemInput myItem: myItems) {
                     //TODO: insert to Item table
-                    String itemI = myItems.get(i).getItemName();
-                    String priceI = myItems.get(i).getPrice();
-                    boolean taxI = myItems.get(i).getTax();
+                    String itemI = myItem.getItemName();
+                    String priceI = myItem.getPrice();
+                    boolean taxI = myItem.getTax();
                     Toast.makeText(getBaseContext(), "Tax: " + taxI + " Item: " + itemI + " Price: " + priceI, Toast.LENGTH_SHORT).show();
                 }
+
+                //Get the tax rate and store to db in Bill
+                EditText taxRate = (EditText) findViewById(R.id.ItemTax);
+                taxRateBill = taxRate.getText().toString();
+                Toast.makeText(getBaseContext(), "Tax rate: " + taxRateBill, Toast.LENGTH_SHORT).show();
+                //TODO: inset tax rate to DB
             }
         });
 
@@ -124,13 +135,33 @@ public class BillContentPage extends AppCompatActivity {
                 holder = (ViewHolder) convertView.getTag();
             }
 
+            final int delPos = position;
+            //Delete an item
+            final Button del = (Button) convertView.findViewById(R.id.deleteBtn);
+            del.setOnClickListener(new View.OnClickListener(){
+                public void onClick(View v){
+                    myItems.remove(delPos);
+                    notifyDataSetChanged();
+                }
+            });
+
+            //TODO: get people from DB
             //Mock People
-            String[] items = new String[] {"Alice", "Jenny", "Louis", "Jeff", "Sherry", "Aaron", "Chiao", "Ning", "Chia-i"};
-            //Use a Spinner to select one value from items
-            final Spinner spinner = (Spinner) convertView.findViewById(R.id.spinner2);
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(BillContentPage.this, android.R.layout.simple_spinner_item,items);
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            spinner.setAdapter(adapter);
+            peopleList = new String[] {"Alice", "Jenny", "Louis", "Jeff", "Sherry", "Aaron", "Chiao", "Ning", "Chia-i"};
+            //Use a MultiSpinner to select people to share
+            adapter = new ArrayAdapter<String>(BillContentPage.this, android.R.layout.simple_spinner_item);
+            for(String person : peopleList) {
+                adapter.add(person);
+            }
+
+            //Get spinner and set adapter
+            spinner = (MultiSpinner) convertView.findViewById(R.id.spinner2);
+            spinner.setAdapter(adapter, false, onSelectedListener);
+
+            //Set initial selection
+            boolean[] selectedItems = new boolean[adapter.getCount()];
+            selectedItems[0] = true; // select first item
+            spinner.setSelected(selectedItems);
 
             //Fill EditText with the value you have in data source
             ItemInput myThisItem = myItems.get(position);
@@ -184,6 +215,18 @@ public class BillContentPage extends AppCompatActivity {
             return convertView;
         }
     }
+
+    //Action after select whom to share
+    private MultiSpinner.MultiSpinnerListener onSelectedListener = new MultiSpinner.MultiSpinnerListener() {
+        public void onItemsSelected(boolean[] selected) {
+            for(int i = 0; i < selected.length; i++) {
+                if(selected[i] == true) {
+                    String personName = peopleList[i];
+                    Toast.makeText(getBaseContext(), personName + " is selected", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+    };
 
     class ViewHolder {
         CheckBox taxSelect;
