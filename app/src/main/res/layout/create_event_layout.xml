@@ -53,7 +53,7 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:scaleType="fitCenter"
-                android:src="@drawable/plus"
+                android:src="@drawable/ic_add_black"
                 android:background="@null" />
 
         </LinearLayout>

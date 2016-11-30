@@ -44,7 +44,7 @@ public class EventPage extends AppCompatActivity {
 
         event = (Event)intent.getSerializableExtra("Event");
         TextView description = (TextView)findViewById(R.id.description);
-        String text = "Date  : " + event.getStartDate().getMonth() + "/" + event.getStartDate().getDay() + " - " +
+        String text = event.getStartDate().getMonth() + "/" + event.getStartDate().getDay() + " - " +
                       event.getEndDate().getMonth() + "/" + event.getEndDate().getDay() + "\n";
 
         description.setText(text);
