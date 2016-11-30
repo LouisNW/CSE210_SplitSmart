@@ -64,11 +64,11 @@
 
             </LinearLayout>
 
-            <!--<cuneyt.example.com.tagview.Tag.TagView-->
-                <!--android:id="@+id/tag_group"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="match_parent"-->
-                <!--android:layout_margin="10dp" />-->
+            <com.cunoraz.tagview.TagView
+                android:id="@+id/people"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="10dp" />
 
         </LinearLayout>
     </ScrollView>
