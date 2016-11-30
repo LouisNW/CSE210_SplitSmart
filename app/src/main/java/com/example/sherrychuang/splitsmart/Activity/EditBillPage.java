@@ -39,7 +39,7 @@ public class EditBillPage extends Activity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
-        setContentView(R.layout.edit_bill_layout);
+        setContentView(R.layout.edit_bill_dialog_layout);
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         event = (Event) intent.getSerializableExtra("Event");
         bill = (Bill) intent.getSerializableExtra("Bill");
