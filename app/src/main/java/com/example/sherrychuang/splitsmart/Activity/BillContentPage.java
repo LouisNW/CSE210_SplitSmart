@@ -1,122 +1,181 @@
 package com.example.sherrychuang.splitsmart.Activity;
 
+import java.util.ArrayList;
+
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnFocusChangeListener;
-import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.example.sherrychuang.splitsmart.R;
-import com.example.sherrychuang.splitsmart.data.Item;
 
 /**
- * Created by sherrychuang on 11/15/16.
+ * Modified by jenny on 11/29/16.
  */
 
 public class BillContentPage extends AppCompatActivity {
-
-    private EditText textItem;
-    private EditText textPrice;
-    private String strItem;
-    private String strPrice;
-    private List<ItemInput> itemInputs;
-    //LIST OF ARRAY STRINGS WHICH WILL SERVE AS LIST ITEMS
-    private ArrayList<ItemInput> listItems;
-
-    //DEFINING A STRING ADAPTER WHICH WILL HANDLE THE DATA OF THE LISTVIEW
-    private CustAdapter adapter;
+    private ListView myList;
+    private BillAdapter myAdapter;
+    private ArrayList<ItemInput> myItems;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.item_layout);
+        setContentView(R.layout.bill_content_page_layout);
 
-        itemInputs = new ArrayList<ItemInput>();
-        listItems = new ArrayList<ItemInput>();
-        adapter = new CustAdapter(this, listItems);
+        myItems = new ArrayList<ItemInput>();
 
-        ListView listView = (ListView) findViewById(android.R.id.list);
-        listView.setAdapter(adapter);
+        myList = (ListView) findViewById(R.id.MyList);
+        myList.setItemsCanFocus(true);
+        myAdapter = new BillAdapter();
+        myList.setAdapter(myAdapter);
 
-        //Add a item manually
-        final Button button = (Button) findViewById(R.id.addBtn);
-        button.setOnClickListener(new View.OnClickListener(){
+        //Add a bill_contect_item manually
+        final Button addButton = (Button) findViewById(R.id.addBtn);
+        addButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
-                ItemInput item = new ItemInput(false, "", "");
-                listItems.add(item);
-                adapter.notifyDataSetChanged();
+                addNewItem();
+                myAdapter.notifyDataSetChanged();
+
+                //scroll to the bottom of list so that user see the last record
+                myList.post(new Runnable(){
+                    public void run() {
+                        myList.setSelection(myList.getCount() - 1);
+                    }
+                });
             }
         });
 
-
-        for(int i =  0; i < 3; i++) {
-            ItemInput newItem = new ItemInput(true, "Apple", "1");
-            itemInputs.add(newItem);
-            adapter.add(newItem);
-        }
-
-        View inflatedView = getLayoutInflater().inflate(R.layout.bill_item_row_layout, null);
-        textItem = (EditText) inflatedView.findViewById(R.id.itemName);
-        textItem.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                Toast.makeText(getBaseContext(), "Edit item Successfully", Toast.LENGTH_SHORT).show();
-                strItem = textItem.getText().toString();
-                textItem.getText().clear();
-                textItem.setText(strItem);
-                adapter.notifyDataSetChanged();
-            }
-        });
-/***
-        textItem.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    Toast.makeText(getBaseContext(), "Edit item Successfully", Toast.LENGTH_SHORT).show();
-                    strItem = textItem.getText().toString();
-                    textItem.getText().clear();
-                    textItem.setText(strItem);
-                    adapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                    Toast.makeText(getBaseContext(), "Edit item Successfully", Toast.LENGTH_SHORT).show();
-                    strItem = textItem.getText().toString();
-                    textItem.getText().clear();
-                    textItem.setText(strItem);
-                    adapter.notifyDataSetChanged();
-            }
-        });
-
-***/
-
-        //Add a item manually
+        //Click save button
         final Button save = (Button) findViewById(R.id.setup_macroSavebtn);
         save.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
-                Toast.makeText(getBaseContext(), "Item: " +  strItem + " Price " + strPrice, Toast.LENGTH_SHORT).show();
+                for(int i = 0; i < myItems.size(); i++){
+                    //TODO: insert to Item table
+                    String itemI = myItems.get(i).getItemName();
+                    String priceI = myItems.get(i).getPrice();
+                    boolean taxI = myItems.get(i).getTax();
+                    Toast.makeText(getBaseContext(), "Tax: " + taxI + " Item: " + itemI + " Price: " + priceI, Toast.LENGTH_SHORT).show();
+                }
             }
         });
+
+        //Click cancel button
+        final Button cancel = (Button) findViewById(R.id.setup_macroCancelbtn);
+        cancel.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+                //Go back to Event page
+                Intent myIntent = new Intent(v.getContext(), EventPage.class);
+                startActivityForResult(myIntent, 0);
+            }
+        });
+    }
+
+    //Add new list view item
+    public void addNewItem() {
+        ItemInput itemInput = new ItemInput(false, "", "");
+        myItems.add(itemInput);
+    }
+
+    //My custom adapter for the listview
+    public class BillAdapter extends BaseAdapter {
+        private LayoutInflater mInflater;
+
+        public BillAdapter() {
+            mInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        }
+
+        public int getCount() {
+            return myItems.size();
+        }
+
+        public Object getItem(int position) {
+            return position;
+        }
+
+        public long getItemId(int position) {
+            return position;
+        }
+
+        public View getView(int position, View convertView, ViewGroup parent) {
+            ViewHolder holder;
+            if (convertView == null) {
+                holder = new ViewHolder();
+                convertView = mInflater.inflate(R.layout.bill_contect_item, null);
+                holder.itemName = (EditText) convertView.findViewById(R.id.ItemName);
+                holder.itemPrice = (EditText) convertView.findViewById(R.id.ItemPrice);
+                holder.taxSelect = (CheckBox) convertView.findViewById(R.id.TaxCheckbox);
+                convertView.setTag(holder);
+            } else {
+                holder = (ViewHolder) convertView.getTag();
+            }
+
+            //Fill EditText with the value you have in data source
+            ItemInput myThisItem = myItems.get(position);
+            holder.itemName.setText(myThisItem.getItemName());
+            holder.itemName.setId(position);
+            holder.itemPrice.setText(myThisItem.getPrice());
+            holder.itemPrice.setId(position);
+
+            //Check the tax check box
+            holder.taxSelect.setChecked(myThisItem.getTax());
+            holder.taxSelect.setId(position);
+
+            //Update adapter once we finish with editing
+            holder.itemName.setOnFocusChangeListener(new OnFocusChangeListener() {
+                public void onFocusChange(View v, boolean hasFocus) {
+                    if (!hasFocus){
+                        final int position = v.getId();
+                        final EditText Caption = (EditText) v;
+                        ItemInput myThisItem = myItems.get(position);
+                        String editResult = Caption.getText().toString();
+                        myThisItem.setItemName(editResult);
+                        Toast.makeText(getBaseContext(), "Name " + position + " is " + editResult, Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+
+            holder.itemPrice.setOnFocusChangeListener(new OnFocusChangeListener() {
+                public void onFocusChange(View v, boolean hasFocus) {
+                    if (!hasFocus){
+                        final int position = v.getId();
+                        final EditText Caption = (EditText) v;
+                        ItemInput myThisItem = myItems.get(position);
+                        String editResult = Caption.getText().toString();
+                        myThisItem.setPrice(editResult);
+                        Toast.makeText(getBaseContext(), "Price " + position + " is " + editResult, Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+
+            holder.taxSelect.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    final int position = v.getId();
+                    final CheckBox cb = (CheckBox) v;
+                    ItemInput myThisItem = myItems.get(position);
+                    boolean checkRes = cb.isChecked();
+                    myThisItem.setTax(checkRes);
+                    Toast.makeText(getBaseContext(), "Tax " + position + " is " + checkRes, Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            return convertView;
+        }
+    }
+
+    class ViewHolder {
+        CheckBox taxSelect;
+        EditText itemName;
+        EditText itemPrice;
     }
 }

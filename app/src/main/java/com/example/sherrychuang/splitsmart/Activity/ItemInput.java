@@ -1,17 +1,41 @@
 package com.example.sherrychuang.splitsmart.Activity;
 
 /**
- * Created by alice on 11/26/16.
+ * Created by jenny on 11/29/16.
+ * For Item in the Bill Content Page.
  */
 
 public class ItemInput {
-    public boolean tax;
-    public String itemName;
-    public String price;
 
-    public ItemInput(boolean tax, String itemName, String price) {
-        this.tax = tax;
+    private boolean taxSelect;
+    private String itemName;
+    private String itemPrice;
+
+    public ItemInput(boolean taxSelect, String itemName, String itemPrice) {
+        this.taxSelect = taxSelect;
         this.itemName = itemName;
-        this.price = price;
+        this.itemPrice = itemPrice;
+    }
+
+    public boolean getTax() {
+        return taxSelect;
+    }
+
+    public void setTax(boolean tax) {
+        this.taxSelect = tax;
+    }
+
+    public String getItemName() { return itemName; }
+
+    public void setItemName(String itemName) {
+        this.itemName = itemName;
+    }
+
+    public String getPrice() {
+        return itemPrice;
+    }
+
+    public void setPrice(String price) {
+        this.itemPrice = price;
     }
 }
