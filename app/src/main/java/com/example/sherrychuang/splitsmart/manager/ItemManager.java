@@ -41,7 +41,6 @@ public interface ItemManager {
      *  1) Item is in the DB.
      *  2) All persons are in the DB.
      * For simplicity, this function simply replaces the previous list (if any) with the given list.
-     * This function always return true.
      * @param item
      * @param persons
      * @return false if any of the persons does not belong to the bill and the event
