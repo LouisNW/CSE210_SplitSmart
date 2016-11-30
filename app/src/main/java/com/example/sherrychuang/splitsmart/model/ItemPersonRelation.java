@@ -32,7 +32,7 @@ public class ItemPersonRelation {
                     ItemDAO.TABLE_NAME + "(" + ItemDAO.KEY_ID + ") " +
                     FOREIGN_KEY_RULES + ", " +
                     "FOREIGN KEY (" + PERSON_ID_COLUMN + ") REFERENCES " +
-                    EventDAO.TABLE_NAME + "(" + EventDAO.KEY_ID + ") " +
+                    PersonDAO.TABLE_NAME + "(" + PersonDAO.KEY_ID + ") " +
                     FOREIGN_KEY_RULES + ")";
 
     private SQLiteDatabase db;

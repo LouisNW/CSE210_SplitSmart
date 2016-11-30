@@ -31,7 +31,7 @@ public class BillPersonRelation {
                     BillDAO.TABLE_NAME + "(" + BillDAO.KEY_ID + ") " +
                     FOREIGN_KEY_RULES + ", " +
                     "FOREIGN KEY (" + PERSON_ID_COLUMN + ") REFERENCES " +
-                    EventDAO.TABLE_NAME + "(" + EventDAO.KEY_ID + ") " +
+                    PersonDAO.TABLE_NAME + "(" + PersonDAO.KEY_ID + ") " +
                     FOREIGN_KEY_RULES + ")";
 
     private SQLiteDatabase db;
@@ -57,7 +57,9 @@ public class BillPersonRelation {
     }
 
     public boolean updatePersonsOfBill(Bill bill, List<Person> persons) {
-        if (!isValidInput(bill, persons)) return false;
+        if (!isValidInput(bill, persons)) {
+            return false;
+        }
 
         long billID = bill.getId();
         deleteAllPersonsOfBill(billID);
@@ -79,10 +81,12 @@ public class BillPersonRelation {
 
     // Check if all the persons are belong to the event
     private boolean isValidInput(Bill bill, List<Person> persons) {
-        long billID = bill.getId();
+        long eventID = bill.getEventID();
 
         for (Person p : persons) {
-            if (p.getEventID() != billID) return false;
+            if (p.getEventID() != eventID) {
+                return false;
+            }
         }
         return true;
     }
