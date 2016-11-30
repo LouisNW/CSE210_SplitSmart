@@ -104,7 +104,7 @@ public class EditEventPage extends Activity {
         });
 
 
-        ImageButton addFriendButton = (ImageButton) findViewById(R.id.addPerson);
+        ImageButton addFriendButton = (ImageButton) findViewById(R.id.add_person);
         addFriendButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
                 Toast.makeText(getApplicationContext(), "add friend", Toast.LENGTH_SHORT).show();

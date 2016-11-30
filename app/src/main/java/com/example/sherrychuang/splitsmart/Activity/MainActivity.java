@@ -80,8 +80,7 @@ public class MainActivity extends AppCompatActivity {
             eventManager.deleteEvent(events.get(info.position).getId());
             events.remove(events.get(info.position));
             adapter.remove(adapter.getItem(info.position));
-            Toast toast = Toast.makeText(getApplicationContext(), "deleted " + Integer.toString(info.position), Toast.LENGTH_SHORT);
-            toast.show();
+            events.remove(info.position);
         }
         return true;
     }
