@@ -80,7 +80,6 @@ public class MainActivity extends AppCompatActivity {
             eventManager.deleteEvent(events.get(info.position).getId());
             events.remove(events.get(info.position));
             adapter.remove(adapter.getItem(info.position));
-            events.remove(info.position);
         }
         return true;
     }
