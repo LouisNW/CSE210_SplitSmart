@@ -53,7 +53,7 @@ public class BillPage extends Activity {
 
         //Creates a builder for an alert dialog that uses the default alert dialog theme
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
-        alert.setTitle("Create a New Bill");
+        //alert.setTitle("Create a New Bill");
         //Disallow cancel of AlertDialog on click of back button and outside touch
         alert.setCancelable(false);
 
