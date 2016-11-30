@@ -16,32 +16,37 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight=".2"
-            android:layout_marginLeft="9sp"
             android:layout_gravity="center"
-            android:textSize="14sp"
+            android:textSize="15sp"
             android:textStyle="bold"
-            android:text="Tax" />
+            android:background="@android:color/holo_blue_dark"
+            android:textColor="#EEEEEE"
+            android:text="  Tax" />
 
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight=".5"
-            android:layout_marginLeft="15sp"
+            android:layout_marginLeft="5sp"
             android:layout_gravity="center"
-            android:textSize="14sp"
+            android:textSize="15sp"
             android:textStyle="bold"
-            android:text="Item" />
+            android:background="@android:color/holo_blue_dark"
+            android:textColor="#EEEEEE"
+            android:text="  Item  " />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0.42"
-            android:layout_marginLeft="15sp"
+            android:layout_marginLeft="5sp"
             android:layout_gravity="center"
-            android:textSize="14sp"
+            android:textSize="15sp"
             android:textStyle="bold"
-            android:text="Price" />
+            android:background="@android:color/holo_blue_dark"
+            android:textColor="#EEEEEE"
+            android:text="  Price  " />
     </LinearLayout>
 
 
@@ -49,52 +54,52 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:weightSum="1">
 
         <CheckBox android:id="@+id/TaxCheckbox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="0.01"
+            android:layout_weight="0.19"
             android:layout_marginLeft="5sp"
             android:layout_gravity="center"
-            android:textSize="14sp"
-            android:textStyle="bold"
             android:focusable="false"
-            android:focusableInTouchMode="false" />
+            android:focusableInTouchMode="false"
+            android:buttonTint="@color/colorPrimaryDark"/>
 
         <EditText
             android:id="@+id/ItemName"
-            android:layout_width="wrap_content"
+            android:layout_width="145dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.05"
-            android:layout_marginLeft="15sp"
             android:inputType="text"
             android:maxLines="1"
             android:layout_gravity="center"
             android:hint="Item"
-            android:textSize="14sp" />
+            android:textSize="15sp"
+            android:layout_weight="0.14" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="15sp"
+            android:layout_marginLeft="10sp"
             android:layout_gravity="center"
-            android:textSize="14sp"
+            android:textSize="15sp"
             android:textStyle="bold"
-            android:text="$" />
+            android:text="$"
+            android:layout_weight="0.00" />
 
         <EditText
             android:id="@+id/ItemPrice"
-            android:layout_width="wrap_content"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.05"
-            android:layout_marginLeft="15sp"
+            android:layout_marginLeft="10sp"
             android:inputType="text"
             android:maxLines="1"
             android:layout_gravity="center"
             android:hint="Price"
-            android:textSize="14sp"/>
-        </LinearLayout>
+            android:textSize="15sp"
+            android:layout_weight="0.43" />
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -107,21 +112,22 @@
             style="?android:attr/spinnerItemStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
+            android:textSize="15sp"
             android:textStyle="bold"
+            android:textColor="@android:color/holo_blue_dark"
             android:text="Shared by:"/>
 
         <com.thomashaertel.widget.MultiSpinner
             android:id="@+id/spinner2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.83"/>
+            android:layout_width="200dp"
+            android:layout_height="wrap_content" />
 
-        <Button
+        <ImageButton
             android:id="@+id/deleteBtn"
-            android:text="Delete"
+            android:src="@drawable/ic_remove_circle_white_16dp"
+            android:backgroundTint="@color/colorPrimaryDark"
+            android:layout_marginLeft="10sp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="50sp"/>
+            android:layout_height="wrap_content" />
     </LinearLayout>
 </LinearLayout>

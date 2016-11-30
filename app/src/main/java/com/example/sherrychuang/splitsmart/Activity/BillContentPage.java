@@ -1,12 +1,15 @@
 package com.example.sherrychuang.splitsmart.Activity;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup;
@@ -15,22 +18,25 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.Spinner;
 import android.widget.Toast;
-
 
 import com.example.sherrychuang.splitsmart.R;
 import com.thomashaertel.widget.MultiSpinner;
 
 /**
  * Modified by jenny on 11/29/16.
+ * Description: The billContentPage shows the name, price, tax, person to shared of each item by
+ * getting data from image-parse-to-text or manually inputs. Items will then be stored after users
+ * clicked on the "SAVE" button; otherwise, items will not be stored and it will go back to the
+ * Event Page.
  */
 
 public class BillContentPage extends AppCompatActivity {
     private ListView myList;
     private BillAdapter myAdapter;
-    private ArrayList<ItemInput> myItems;
+    private List<ItemInput> myItems;
     private MultiSpinner spinner;
     private ArrayAdapter<String> adapter;
     private String[] peopleList;
@@ -41,31 +47,27 @@ public class BillContentPage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.bill_content_page_layout);
 
+
+        //Get items from the image-parse-to-text
         myItems = new ArrayList<ItemInput>();
+        /***
+        myItems = (ArrayList<ItemInput>)getIntent().getSerializableExtra("ItemListExtra");
+
+        //Go back to the Event Page if myItems is empty
+        if(myItems.size() <= 0){
+            Intent i = new Intent(BillContentPage.this, EventPage.class) ;
+            startActivity (i);
+            BillContentPage.this.finish();
+            Toast.makeText(getBaseContext(), "Empty Item for set up this bill", Toast.LENGTH_SHORT).show();
+        }
+         ***/
 
         myList = (ListView) findViewById(R.id.MyList);
         myList.setItemsCanFocus(true);
         myAdapter = new BillAdapter();
         myList.setAdapter(myAdapter);
 
-        //Add a bill_content_item manually
-        final Button addButton = (Button) findViewById(R.id.addBtn);
-        addButton.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View v){
-                addNewItem();
-                myAdapter.notifyDataSetChanged();
-
-                //scroll to the bottom of list so that user see the last record
-                myList.post(new Runnable(){
-                    public void run() {
-                        myList.setSelection(myList.getCount() - 1);
-                    }
-                });
-            }
-        });
-
-
-        //Click save button
+        //Click the SAVE button
         final Button save = (Button) findViewById(R.id.setup_macroSavebtn);
         save.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
@@ -77,7 +79,7 @@ public class BillContentPage extends AppCompatActivity {
                     Toast.makeText(getBaseContext(), "Tax: " + taxI + " Item: " + itemI + " Price: " + priceI, Toast.LENGTH_SHORT).show();
                 }
 
-                //Get the tax rate and store to db in Bill
+                //Get the tax rate and store it to db in Bill
                 EditText taxRate = (EditText) findViewById(R.id.ItemTax);
                 taxRateBill = taxRate.getText().toString();
                 Toast.makeText(getBaseContext(), "Tax rate: " + taxRateBill, Toast.LENGTH_SHORT).show();
@@ -85,24 +87,24 @@ public class BillContentPage extends AppCompatActivity {
             }
         });
 
-        //Click cancel button
+        //Click cancel button and go back to Event Page
         final Button cancel = (Button) findViewById(R.id.setup_macroCancelbtn);
         cancel.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
-                //Go back to Event page
+                //Go back to the Event page
                 Intent myIntent = new Intent(v.getContext(), EventPage.class);
                 startActivityForResult(myIntent, 0);
             }
         });
     }
 
-    //Add new list view item
+    //Add a new ListView item
     public void addNewItem() {
         ItemInput itemInput = new ItemInput(false, "", "");
         myItems.add(itemInput);
     }
 
-    //My custom adapter for the listview
+    //Custom adapter for the ListView
     public class BillAdapter extends BaseAdapter {
         private LayoutInflater mInflater;
 
@@ -123,6 +125,8 @@ public class BillContentPage extends AppCompatActivity {
         }
 
         public View getView(int position, View convertView, ViewGroup parent) {
+            //Use ViewHolder to avoid frequent call of findViewById() during ListView scrolling,
+            //and that will make it smooth
             ViewHolder holder;
             if (convertView == null) {
                 holder = new ViewHolder();
@@ -137,7 +141,7 @@ public class BillContentPage extends AppCompatActivity {
 
             final int delPos = position;
             //Delete an item
-            final Button del = (Button) convertView.findViewById(R.id.deleteBtn);
+            final ImageButton del = (ImageButton) convertView.findViewById(R.id.deleteBtn);
             del.setOnClickListener(new View.OnClickListener(){
                 public void onClick(View v){
                     myItems.remove(delPos);
@@ -232,5 +236,27 @@ public class BillContentPage extends AppCompatActivity {
         CheckBox taxSelect;
         EditText itemName;
         EditText itemPrice;
+    }
+
+    //Show Item via +1 icon in the menu
+    public boolean onCreateOptionsMenu(Menu menu){
+        getMenuInflater().inflate(R.menu.add_item_icon, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    //Add Item via +1 icon in the menu
+    public void clickMenuItem(MenuItem item) {
+        int itemId = item.getItemId();
+        if(itemId == R.id.action_add) {
+            addNewItem();
+            myAdapter.notifyDataSetChanged();
+
+            //Scroll to the bottom of list so that user see the last record
+            myList.post(new Runnable() {
+                public void run() {
+                    myList.setSelection(myList.getCount() - 1);
+                }
+            });
+        }
     }
 }

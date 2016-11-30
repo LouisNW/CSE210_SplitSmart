@@ -1,11 +1,15 @@
 package com.example.sherrychuang.splitsmart.Activity;
 
+import java.io.Serializable;
+
 /**
  * Created by jenny on 11/29/16.
  * For Item in the Bill Content Page.
+ * Description: This ItemInput class stores temporary item information which is parsed to
+ * texts from the image, and will be used in the BillContentPage.
  */
 
-public class ItemInput {
+public class ItemInput implements Serializable {
 
     private boolean taxSelect;
     private String itemName;

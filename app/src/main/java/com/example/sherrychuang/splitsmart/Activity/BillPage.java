@@ -82,7 +82,7 @@ public class BillPage extends Activity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 Toast.makeText(getBaseContext(), "Cancel clicked", Toast.LENGTH_SHORT).show();
-                //Back to the previous page
+                //Back to the Event page
                 finish();
             }
         });
