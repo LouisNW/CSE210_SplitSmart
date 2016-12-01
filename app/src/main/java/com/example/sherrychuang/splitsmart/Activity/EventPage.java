@@ -1,20 +1,29 @@
 package com.example.sherrychuang.splitsmart.Activity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.ContextMenu;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Spinner;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import java.util.List;
+
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.content.DialogInterface;
 import android.app.AlertDialog;
+
+import com.cunoraz.tagview.Tag;
+import com.cunoraz.tagview.TagView;
 
 import com.example.sherrychuang.splitsmart.R;
 import com.example.sherrychuang.splitsmart.data.*;
@@ -35,34 +44,58 @@ public class EventPage extends AppCompatActivity {
     private PersonManager personManager;
     private List<Person> people;
     private Event event;
+    private EditText personNameView;
+    private EditText personEmailView;
+    private Bill bill;
+    private TagView tagGroup;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // initialize some default stuff, get all the manager, data
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
         setContentView(R.layout.event_page_layout);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         event = (Event)intent.getSerializableExtra("Event");
-        TextView description = (TextView)findViewById(R.id.description);
-        String text = event.getStartDate().getMonth() + "/" + event.getStartDate().getDay() + " - " +
-                      event.getEndDate().getMonth() + "/" + event.getEndDate().getDay() + "\n";
-
-        description.setText(text);
-
-        getSupportActionBar().setTitle(event.getName());
-        billListView = (ListView) findViewById(R.id.bill_list);
         personManager = ManagerFactory.getPersonManager(this);
         people = personManager.getAllPersonsOfEvent(event.getId());
         billManager = ManagerFactory.getBillManager(this);
         bills = billManager.getAllBillsOfEvent(event.getId());
+
+        // get and set action bar
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle(event.getName());
+
+        // get the date text view
+        TextView dateTextView = (TextView)findViewById(R.id.date);
+        String text = event.getStartDate().getMonth() + "/" + event.getStartDate().getDay() + " - " +
+                      event.getEndDate().getMonth() + "/" + event.getEndDate().getDay();
+        dateTextView.setText(text);
+
+        // tag view of participants
+        tagGroup = (TagView) findViewById(R.id.people_tag);
+        ArrayList<Tag> pNameTag = new ArrayList<>();
+        for (int i = 0; i < people.size(); i++) {
+            Tag tag = new Tag(people.get(i).getName());
+            tag.layoutColor = Color.BLUE;
+            tag.isDeletable = false;
+            tag.tagTextSize = 15;
+            tag.radius = 15;
+            pNameTag.add(tag);
+        }
+        tagGroup.addTags(pNameTag);
+
+
+        // get and display the bill list
+        billListView = (ListView) findViewById(R.id.bill_list);
         billsName = new ArrayList<>();
         for(int i = 0; i < bills.size(); i++) {
             billsName.add(bills.get(i).getName());
         }
 
-        adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, billsName);
+        adapter = new ArrayAdapter(this, R.layout.custom_listview_item, billsName);
         billListView.setAdapter(adapter);
         registerForContextMenu(billListView);
+
+        // setup bill list onclick listener
         billListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -72,46 +105,102 @@ public class EventPage extends AppCompatActivity {
                 return;
             }
         });
+
+        // setup split button listener
+        final Button split_button = (Button) findViewById(R.id.split);
+        split_button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "go to split smart!", Toast.LENGTH_SHORT).show();
+                Intent myIntent = new Intent(EventPage.this, SplitResultPage.class);
+                myIntent.putExtra("Event", event);
+                EventPage.this.startActivity(myIntent);
+            }
+        });
     }
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_event_page, menu);
         return true;
     }
+
+    // click menu bar icon on top of the screen
     public void clickMenuItem(MenuItem item) {
         int itemId = item.getItemId();
+        // click create bill icon on top, generate a dialog for user to choose camera, gallery, manual, or cancel
         if (itemId == R.id.addBill) {
             final CharSequence[] items = {"Camera", "Gallery", "Manual", "Cancel"};
 
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setItems(items, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int i) {
+                    // click camera
                     if (items[i].equals("Camera")) {
                         // Go to Camera
                         Toast toast = Toast.makeText(getApplicationContext(), items[i], Toast.LENGTH_SHORT);
                         toast.show();
                     }
+                    // click gallery
                     else if (items[i].equals("Gallery")) {
                         // Go to gallery
                         Toast toast = Toast.makeText(getApplicationContext(), items[i], Toast.LENGTH_SHORT);
                         toast.show();
                     }
+                    // click manual
                     else if (items[i].equals("Manual")) {
-                        // manually input
+                        // directly go to createBillPage
                         Toast toast = Toast.makeText(getApplicationContext(), items[i], Toast.LENGTH_SHORT);
                         toast.show();
                     }
+                    // click cancel
                     else if (items[i].equals("Cancel")) {
-                        dialog.dismiss();
+                        dialog.cancel();
                     }
                 }
             });
             builder.show();
         }
+        // click add person
         else if (itemId == R.id.addPerson) {
-            String pName = "";
-            for(int i = 0; i < people.size(); i++) {
-                pName = pName + people.get(i).getName() + " ";
-            }
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+            LayoutInflater inflater= this.getLayoutInflater();
+            View layout = inflater.inflate(R.layout.add_friend_dialog_layout, null);
+            alertDialogBuilder.setView(layout);
+            final AlertDialog alertDialog = alertDialogBuilder.create();
+            alertDialog.show();
+
+            personNameView = (EditText) layout.findViewById(R.id.person_name);
+            personEmailView = (EditText) layout.findViewById(R.id.person_email);
+
+            // ok button listener
+            Button okButton = (Button) layout.findViewById(R.id.ok);
+            okButton.setOnClickListener(new View.OnClickListener(){
+                public void onClick(View view){
+                    String tempName = personNameView.getText().toString();
+                    String tempEmail = personEmailView.getText().toString();
+                    if (tempName.length() > 0 && tempEmail.length() > 0) {
+                        // update tag
+                        Tag tag = new Tag(tempName);
+                        tag.layoutColor = Color.BLUE;
+                        tag.isDeletable = false;
+                        tag.tagTextSize = 15;
+                        tag.radius = 15;
+                        tagGroup.addTag(tag);
+                        // update people list
+                        Person p = new Person(tempName, tempEmail, event.getId());
+                        people.add(p);
+                        // update database
+                        personManager.insertPerson(p);
+                    }
+                    alertDialog.dismiss();
+                }
+            });
+            // cancel button listener
+            Button cancelButton = (Button) layout.findViewById(R.id.cancel);
+            cancelButton.setOnClickListener(new View.OnClickListener(){
+                public void onClick(View view){
+                    Toast.makeText(getApplicationContext(), "add friend cancel", Toast.LENGTH_SHORT).show();
+                    alertDialog.cancel();
+                }
+            });
         }
         else if (itemId == android.R.id.home) {
             Intent myIntent = new Intent(EventPage.this, MainActivity.class);
@@ -119,31 +208,86 @@ public class EventPage extends AppCompatActivity {
         }
         return;
     }
+
+    // add things into menu bar
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         if (v.getId() == R.id.bill_list) {
             AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-            menu.setHeaderTitle(billsName.get(info.position));
-            menu.add(Menu.NONE, 0, Menu.NONE, "Edit");
-            menu.add(Menu.NONE, 1, Menu.NONE, "Delete");
+            menu.add(Menu.NONE, 0, Menu.NONE, "Edit this bill");
+            menu.add(Menu.NONE, 1, Menu.NONE, "Delete this bill");
         }
     }
+
+    private EditText billNameView;
+    private EditText taxRateView;
+
+    //long click on bill listener
     public boolean onContextItemSelected(MenuItem menuItem) {
-        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)menuItem.getMenuInfo();
+        final AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)menuItem.getMenuInfo();
         int menuItemIndex = menuItem.getItemId();
+
+        // click edit
         if (menuItemIndex == 0) {
-            // choose "Edit"
-            Intent myIntent = new Intent(EventPage.this, EditBillPage.class);
-            myIntent.putExtra("Event", event);
-            myIntent.putExtra("Bill", bills.get(info.position));
-            EventPage.this.startActivity(myIntent);
+            // build alert dialog and get everything needed
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+            LayoutInflater inflater= this.getLayoutInflater();
+            View layout = inflater.inflate(R.layout.edit_bill_dialog_layout, null);
+            alertDialogBuilder.setView(layout);
+            final AlertDialog alertDialog = alertDialogBuilder.create();
+            alertDialog.show();
+            billNameView = (EditText) layout.findViewById(R.id.bill_name);
+            bill = bills.get(info.position);
+            billNameView.setText(bill.getName());
+            taxRateView = (EditText) layout.findViewById(R.id.tax_rate);
+            taxRateView.setText(String.valueOf(bill.getTaxRate()));
+            ArrayList<String> spinnerArray = new ArrayList<>();
+            for (int i = 0; i < people.size(); i++) {
+                spinnerArray.add(people.get(i).getName());
+            }
+            final Spinner spinner = (Spinner) layout.findViewById(R.id.owner);
+            ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, spinnerArray);
+            spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinner.setAdapter(spinnerArrayAdapter);
+
+            // click ok
+            Button okButton = (Button) layout.findViewById(R.id.ok);
+            okButton.setOnClickListener(new View.OnClickListener(){
+                public void onClick(View view){
+                    // get text field and spinner data
+                    String tempBillName = billNameView.getText().toString();
+                    String tempTaxRate = taxRateView.getText().toString();
+                    long owner_id = people.get(spinner.getSelectedItemPosition()).getId();
+                    if (tempBillName.length() > 0 && tempTaxRate.length() > 0) {
+                        // update database
+                        bill.setName(tempBillName);
+                        bill.setTaxRate(Double.parseDouble(tempTaxRate));
+                        bill.setOwnerID(owner_id);
+                        billManager.updateBill(bill);
+
+                        // update adapter
+                        int bill_index = info.position;
+                        bills.set(bill_index, bill);
+                        billsName.set(bill_index, tempBillName);
+                        adapter = new ArrayAdapter(getApplicationContext(), R.layout.custom_listview_item, billsName);
+                        billListView.setAdapter(adapter);
+                    }
+                    alertDialog.dismiss();
+                }
+            });
+            // click cancel
+            Button cancelButton = (Button) layout.findViewById(R.id.cancel);
+            cancelButton.setOnClickListener(new View.OnClickListener(){
+                public void onClick(View view){
+                    alertDialog.dismiss();
+                }
+            });
         }
+        // click delete
         else {
-            // choose "Delete"
             billManager.deleteBill(bills.get(info.position).getId());
             bills.remove(bills.get(info.position));
+            billsName.remove(bills.get(info.position));
             adapter.remove(adapter.getItem(info.position));
-            Toast toast = Toast.makeText(getApplicationContext(), "deleted " + Integer.toString(info.position), Toast.LENGTH_SHORT);
-            toast.show();
         }
         return true;
     }
