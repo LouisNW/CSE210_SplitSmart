@@ -102,6 +102,12 @@ public class EventPage extends AppCompatActivity {
                 CharSequence text = personManager.getPerson(bills.get(i).getOwnerID()).getName();
                 Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
                 toast.show();
+
+                // go to edit bill content page
+                Intent myIntent = new Intent(EventPage.this, EditBillContentPage.class);
+                myIntent.putExtra("Bill", bills.get(i));
+                EventPage.this.startActivity(myIntent);
+
                 return;
             }
         });
@@ -149,6 +155,9 @@ public class EventPage extends AppCompatActivity {
                         // directly go to createBillPage
                         Toast toast = Toast.makeText(getApplicationContext(), items[i], Toast.LENGTH_SHORT);
                         toast.show();
+                        Intent myIntent = new Intent(EventPage.this, BillPage.class);
+                        myIntent.putExtra("Event", event);
+                        EventPage.this.startActivity(myIntent);
                     }
                     // click cancel
                     else if (items[i].equals("Cancel")) {

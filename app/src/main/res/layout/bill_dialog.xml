@@ -30,7 +30,8 @@
             android:textSize="16sp"
             android:textStyle="bold"
             android:text="Bill Name:"
-            android:textColor="@android:color/black" />
+            android:textColor="@android:color/black"
+            android:inputType="text"/>
 
         <EditText
             android:id="@+id/billName"
@@ -59,8 +60,8 @@
 
         <Spinner
             android:id="@+id/spinner1"
-            android:layout_height="18dp"
-            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_width="200dp"
             android:layout_weight="0.32"
             android:spinnerMode="dropdown" />
     </LinearLayout>

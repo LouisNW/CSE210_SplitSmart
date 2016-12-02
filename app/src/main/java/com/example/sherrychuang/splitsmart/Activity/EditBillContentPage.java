@@ -1,7 +1,5 @@
 package com.example.sherrychuang.splitsmart.Activity;
 
-import java.util.ArrayList;
-import java.util.List;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -12,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -24,33 +21,29 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.cunoraz.tagview.Tag;
 import com.cunoraz.tagview.TagView;
 import com.example.sherrychuang.splitsmart.R;
 import com.example.sherrychuang.splitsmart.data.Bill;
-import com.example.sherrychuang.splitsmart.data.Event;
 import com.example.sherrychuang.splitsmart.data.Item;
 import com.example.sherrychuang.splitsmart.data.Person;
 import com.example.sherrychuang.splitsmart.manager.BillManager;
 import com.example.sherrychuang.splitsmart.manager.ItemManager;
 import com.example.sherrychuang.splitsmart.manager.ManagerFactory;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
- * Modified by Jenny and Alice on 12/3/16.
- * Description: The billContentPage shows the name, price, tax, person to shared of each item by
- * getting data from image-parse-to-text or manually inputs. Items will then be stored after users
- * clicked on the "SAVE" button; otherwise, items will not be stored and it will go back to the
- * Event Page.
+ * Created by jenny on 12/3/16.
  */
 
-public class BillContentPage extends AppCompatActivity {
+public class EditBillContentPage extends AppCompatActivity {
     private ListView myList;
-    private BillAdapter myAdapter;
+    private EditBillContentPage.BillAdapter myAdapter;
     private List<ItemInput> myItems;
     private Bill bill;
-    private Event event;
     private BillManager billManager;
     private ItemManager itemManager;
     private List<Person> person;
@@ -59,6 +52,10 @@ public class BillContentPage extends AppCompatActivity {
     private ArrayAdapter<String> spinnerAdapter;
     private List<String> eventPeopleList;
     private List<List<Integer>> personSelectIndex;
+    private List<Item> itemList;
+
+    private EditText taxRate;
+    private List<Boolean> oldItemOrNot;
     private boolean toDelete;
 
     @Override
@@ -69,10 +66,14 @@ public class BillContentPage extends AppCompatActivity {
 
         //Get the information of event, bill and person, and initial the itemManager
         bill = (Bill)intent.getSerializableExtra("Bill");
-        event = (Event)intent.getSerializableExtra("Event");
         billManager = ManagerFactory.getBillManager(this);
         person = billManager.getSharingPersonsOfBill(bill.getId());
         itemManager  = ManagerFactory.getItemManager(this);
+
+
+        // Set Action Bar title
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle(bill.getName());
 
         //Get people name
         eventPeopleList = new ArrayList<String>();
@@ -82,25 +83,46 @@ public class BillContentPage extends AppCompatActivity {
         }
         personSelectIndex = new ArrayList<List<Integer>>();
 
-        //TODO:Get items from image-parse-to-text
         myItems = new ArrayList<ItemInput>();
+        oldItemOrNot = new ArrayList<Boolean>();
 
         //Set the custom adapter
         myList = (ListView) findViewById(R.id.MyList);
         myList.setItemsCanFocus(true);
-        myAdapter = new BillAdapter();
+        myAdapter = new EditBillContentPage.BillAdapter();
         myList.setAdapter(myAdapter);
 
-        //Store items from myItems to listView
-        if(myItems.size() != 0){
-            for (int i = 0; i < myItems.size(); i++){
-                boolean inputItemTax  = myItems.get(i).getTax();
-                String inputItemName = myItems.get(i).getItemName();
-                String inputItemPrice = myItems.get(i).getPrice();
-                addNewItem(inputItemTax,inputItemName, inputItemPrice);
+        //Get all items and show them
+        itemList = itemManager.getAllItemsOfBill(bill.getId());
+        for(int i = 0; i < itemList.size(); i++) {
+            Item item = itemList.get(i);
+            addNewItem(item.isTaxItem(), item.getName(), String.valueOf(item.getPrice()), true);
+            myItems.get(i).setTax(item.isTaxItem());
+            myItems.get(i).setItemName(item.getName());
+            myItems.get(i).setPrice(String.valueOf(item.getPrice()));
+            List<Person> personShareList = itemManager.getSharingPersonsOfAnItem(item.getId());
+
+            for(int j = 0; j < personShareList.size(); j++) {
+                Tag tempTag = new Tag(personShareList.get(j).getName());
+                tempTag.layoutColor = Color.GRAY;
+                tempTag.isDeletable = true;
+                myItems.get(i).setSelectedPeople(tempTag);
+            }
+
+            //Get shared by people for an item
+            List<Person> shareList = itemManager.getSharingPersonsOfAnItem(item.getId());
+            for(int a = 0; a < person.size(); a++) {
+                for(int b = 0; b < shareList.size(); b++) {
+                    if(person.get(a).getId() == shareList.get(b).getId()) {
+                        personSelectIndex.get(i).add(a);
+                    }
+                }
             }
         }
 
+        //Get tax rate and show it
+        taxRate = (EditText) findViewById(R.id.ItemTax);
+        taxRate.setText(String.valueOf(billManager.getBill(bill.getId()).getTaxRate()));
 
         //Set a button for SAVE
         final Button save = (Button) findViewById(R.id.setup_macroSavebtn);
@@ -112,11 +134,23 @@ public class BillContentPage extends AppCompatActivity {
                     String itemI = myItem.getItemName();
                     String priceI = myItem.getPrice();
                     boolean taxI = myItem.getTax();
-                    if (itemI.length() >= 2 && priceI.length() >= 2) {
+                    double priceVal;
+                    if (itemI.length() >= 2  && priceI.length() >= 2) {
                         flagEmptyCheck = false;
-                        double priceVal = Double.parseDouble(priceI);
-                        item = new Item(itemI, priceVal, taxI, bill.getId());
-                        itemManager.insertItem(item);
+                        priceVal = Double.parseDouble(priceI);
+                        //Update existed item
+                        if(oldItemOrNot.get(i)) {
+                            item = itemList.get(i);
+                            item.setName(itemI);
+                            item.setPrice(priceVal);
+                            item.setTaxItem(taxI);
+                            itemManager.updateItem(item);
+                        }
+                        //Insert new item
+                        else {
+                            item = new Item(itemI, priceVal, taxI, bill.getId());
+                            itemManager.insertItem(item);
+                        }
 
                         //Insert Shared by
                         List<Person> personToShare = new ArrayList<Person>();
@@ -131,7 +165,7 @@ public class BillContentPage extends AppCompatActivity {
                         //Error message dialog
                         LayoutInflater inflater= getLayoutInflater();
                         View layout = inflater.inflate(R.layout.bill_warning_layout, null);
-                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(BillContentPage.this);
+                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(EditBillContentPage.this);
                         alertDialogBuilder.setView(layout);
                         alertDialogBuilder.setCancelable(false);
                         final AlertDialog alertDialog = alertDialogBuilder.create();
@@ -149,9 +183,7 @@ public class BillContentPage extends AppCompatActivity {
                 }
 
                 //Get the tax rate and store it to db in Bill
-                EditText taxRate = (EditText) findViewById(R.id.ItemTax);
                 String taxInput = taxRate.getText().toString();
-                Toast.makeText(getBaseContext(), "Tax rate: " + taxInput, Toast.LENGTH_SHORT).show();
                 double taxRateVal;
                 try
                 {
@@ -162,16 +194,10 @@ public class BillContentPage extends AppCompatActivity {
                     taxRateVal = 0;
                 }
 
-                Toast.makeText(getBaseContext(), "Tax rate: " + taxRateVal, Toast.LENGTH_SHORT).show();
-
                 if(flagEmptyCheck == false) {
                     bill.setTaxRate(taxRateVal);
                     billManager.updateBill(bill);
-                    Toast.makeText(getBaseContext(), "Tax rate: " + taxRateVal, Toast.LENGTH_SHORT).show();
-                    //finish();
-                    Intent myIntent = new Intent(BillContentPage.this, EventPage.class);
-                    myIntent.putExtra("Event", event);
-                    BillContentPage.this.startActivity(myIntent);
+                    finish();
                 }
             }
         });
@@ -209,9 +235,9 @@ public class BillContentPage extends AppCompatActivity {
             //Use ViewHolder to avoid frequent call of findViewById() during ListView scrolling,
             //and that will make it smooth
             toDelete = false;
-            final ViewHolder holder;
+            final EditBillContentPage.ViewHolder holder;
             if (convertView == null) {
-                holder = new ViewHolder();
+                holder = new EditBillContentPage.ViewHolder();
                 convertView = mInflater.inflate(R.layout.bill_contect_item, null);
                 holder.itemName = (EditText) convertView.findViewById(R.id.ItemName);
                 holder.itemPrice = (EditText) convertView.findViewById(R.id.ItemPrice);
@@ -220,7 +246,7 @@ public class BillContentPage extends AppCompatActivity {
                 holder.selectedPeople = (TagView) convertView.findViewById(R.id.peopleTag);
                 convertView.setTag(holder);
             } else {
-                holder = (ViewHolder) convertView.getTag();
+                holder = (EditBillContentPage.ViewHolder) convertView.getTag();
             }
 
             final int delPos = position;
@@ -229,6 +255,8 @@ public class BillContentPage extends AppCompatActivity {
             del.setOnClickListener(new View.OnClickListener(){
                 public void onClick(View v){
                     toDelete = true;
+                    if(oldItemOrNot.get(delPos))
+                        itemManager.deleteItem(itemList.get(delPos).getId());
                     myItems.remove(delPos);
                     notifyDataSetChanged();
                 }
@@ -236,7 +264,7 @@ public class BillContentPage extends AppCompatActivity {
 
             //Use a Spinner to select one value from items
             final Spinner spinner = (Spinner) convertView.findViewById(R.id.spinner1);
-            spinnerAdapter = new ArrayAdapter<String>(BillContentPage.this, android.R.layout.simple_spinner_item, eventPeopleList);
+            spinnerAdapter = new ArrayAdapter<String>(EditBillContentPage.this, android.R.layout.simple_spinner_item, eventPeopleList);
             spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spinner.setAdapter(spinnerAdapter);
             spinner.setSelection(0, false); //unselected the default first item
@@ -257,7 +285,7 @@ public class BillContentPage extends AppCompatActivity {
             holder.selectedPeople.setId(position);
 
             //Update adapter once we finish with editing
-            holder.itemName.setOnFocusChangeListener(new OnFocusChangeListener() {
+            holder.itemName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 public void onFocusChange(View v, boolean hasFocus) {
                     if (!hasFocus && !toDelete){
                         final int position = v.getId();
@@ -265,12 +293,11 @@ public class BillContentPage extends AppCompatActivity {
                         ItemInput myThisItem = myItems.get(position);
                         String editResult = Caption.getText().toString();
                         myThisItem.setItemName(editResult);
-                        Toast.makeText(getBaseContext(), "Name " + position + " is " + editResult, Toast.LENGTH_SHORT).show();
                     }
                 }
             });
 
-            holder.itemPrice.setOnFocusChangeListener(new OnFocusChangeListener() {
+            holder.itemPrice.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 public void onFocusChange(View v, boolean hasFocus) {
                     if (!hasFocus && !toDelete){
                         final int position = v.getId();
@@ -278,7 +305,6 @@ public class BillContentPage extends AppCompatActivity {
                         ItemInput myThisItem = myItems.get(position);
                         String editResult = Caption.getText().toString();
                         myThisItem.setPrice(editResult);
-                        Toast.makeText(getBaseContext(), "Price " + position + " is " + editResult, Toast.LENGTH_SHORT).show();
                     }
                 }
             });
@@ -290,7 +316,6 @@ public class BillContentPage extends AppCompatActivity {
                     ItemInput myThisItem = myItems.get(position);
                     boolean checkRes = cb.isChecked();
                     myThisItem.setTax(checkRes);
-                    Toast.makeText(getBaseContext(), "Tax " + position + " is " + checkRes, Toast.LENGTH_SHORT).show();
                 }
             });
 
@@ -340,11 +365,12 @@ public class BillContentPage extends AppCompatActivity {
     }
 
     //Add a new ListView item
-    public void addNewItem(boolean taxSelected, String itemName, String itemPrice) {
+    public void addNewItem(boolean taxSelected, String itemName, String itemPrice, boolean flag) {
         List<Tag> people = new ArrayList<Tag>();
         ItemInput itemInput = new ItemInput(taxSelected, itemName, itemPrice, people);
         myItems.add(itemInput);
         personSelectIndex.add(new ArrayList<Integer>());
+        oldItemOrNot.add(flag);
     }
 
     //Show Item via +1 icon in the menu
@@ -357,7 +383,7 @@ public class BillContentPage extends AppCompatActivity {
     public void clickMenuItem(MenuItem item) {
         int itemId = item.getItemId();
         if(itemId == R.id.action_add) {
-            addNewItem(false, " ", " ");
+            addNewItem(false, " ", " ", false);
             myAdapter.notifyDataSetChanged();
 
             //Scroll to the bottom of list so that user see the last record
@@ -368,4 +394,10 @@ public class BillContentPage extends AppCompatActivity {
             });
         }
     }
+    // on back button press
+    public boolean onOptionsItemSelected(MenuItem item) {
+        onBackPressed();
+        return true;
+    }
+
 }

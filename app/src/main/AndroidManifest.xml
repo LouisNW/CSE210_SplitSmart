@@ -29,12 +29,16 @@
         </activity>
         <activity android:name=".Activity.EditBillPage">
         </activity>
-        <activity android:name=".Activity.BillPage">
+        <activity android:name=".Activity.BillPage"
+            android:noHistory="true">
         </activity>
         <activity android:name=".Activity.SplitResultPage">
 
         </activity>
         <activity android:name=".Activity.BillContentPage">
+
+        </activity>
+        <activity android:name=".Activity.EditBillContentPage">
 
         </activity>
     </application>
