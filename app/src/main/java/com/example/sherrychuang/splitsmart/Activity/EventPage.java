@@ -284,10 +284,33 @@ public class EventPage extends AppCompatActivity {
         }
         // click delete
         else {
-            billManager.deleteBill(bills.get(info.position).getId());
-            bills.remove(bills.get(info.position));
-            billsName.remove(bills.get(info.position));
-            adapter.remove(adapter.getItem(info.position));
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+            LayoutInflater inflater= this.getLayoutInflater();
+            View layout = inflater.inflate(R.layout.delete_warning_dialog_layout, null);
+            alertDialogBuilder.setView(layout);
+            final AlertDialog alertDialog = alertDialogBuilder.create();
+            alertDialog.show();
+
+            final TextView warning_text = (TextView) layout.findViewById(R.id.warning_message);
+            warning_text.setText("Are you sure you want to delete \"" + bills.get(info.position).getName() + "\" ? ");
+            Button okButton = (Button) layout.findViewById(R.id.ok);
+            okButton.setOnClickListener(new View.OnClickListener(){
+                public void onClick(View view){
+                    billManager.deleteBill(bills.get(info.position).getId());
+                    bills.remove(bills.get(info.position));
+                    billsName.remove(bills.get(info.position));
+                    adapter.remove(adapter.getItem(info.position));
+                    alertDialog.dismiss();
+                }
+            });
+            // click cancel
+            Button cancelButton = (Button) layout.findViewById(R.id.cancel);
+            cancelButton.setOnClickListener(new View.OnClickListener(){
+                public void onClick(View view){
+                    alertDialog.dismiss();
+                }
+            });
+
         }
         return true;
     }

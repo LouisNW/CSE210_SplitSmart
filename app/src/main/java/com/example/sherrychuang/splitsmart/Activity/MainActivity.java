@@ -1,12 +1,16 @@
 package com.example.sherrychuang.splitsmart.Activity;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.view.Menu;
 import android.view.ContextMenu;
@@ -65,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
     public boolean onContextItemSelected(MenuItem menuItem) {
-        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)menuItem.getMenuInfo();
+        final AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)menuItem.getMenuInfo();
         int menuItemIndex = menuItem.getItemId();
         if (menuItemIndex == 0) {
             // choose "Edit"
@@ -77,9 +81,32 @@ public class MainActivity extends AppCompatActivity {
         }
         else {
             // choose "Delete"
-            eventManager.deleteEvent(events.get(info.position).getId());
-            events.remove(events.get(info.position));
-            adapter.remove(adapter.getItem(info.position));
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+            LayoutInflater inflater= this.getLayoutInflater();
+            View layout = inflater.inflate(R.layout.delete_warning_dialog_layout, null);
+            alertDialogBuilder.setView(layout);
+            final AlertDialog alertDialog = alertDialogBuilder.create();
+            alertDialog.show();
+
+            final TextView warning_text = (TextView) layout.findViewById(R.id.warning_message);
+            warning_text.setText("Are you sure you want to delete \"" + events.get(info.position).getName() + "\" ? ");
+            Button okButton = (Button) layout.findViewById(R.id.ok);
+            okButton.setOnClickListener(new View.OnClickListener(){
+                public void onClick(View view){
+                    eventManager.deleteEvent(events.get(info.position).getId());
+                    events.remove(events.get(info.position));
+                    adapter.remove(adapter.getItem(info.position));
+                    alertDialog.dismiss();
+                }
+            });
+            // click cancel
+            Button cancelButton = (Button) layout.findViewById(R.id.cancel);
+            cancelButton.setOnClickListener(new View.OnClickListener(){
+                public void onClick(View view){
+                    alertDialog.dismiss();
+                }
+            });
+
         }
         return true;
     }
