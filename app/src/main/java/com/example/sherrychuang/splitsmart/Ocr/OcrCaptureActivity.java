@@ -38,19 +38,25 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
+import com.example.sherrychuang.splitsmart.TestActivityForImage;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.example.sherrychuang.splitsmart.Ocr.ui.camera.CameraSource;
 import com.example.sherrychuang.splitsmart.Ocr.ui.camera.CameraSourcePreview;
 import com.example.sherrychuang.splitsmart.Ocr.ui.camera.GraphicOverlay;
+import com.google.android.gms.vision.text.Text;
 import com.google.android.gms.vision.text.TextBlock;
 import com.google.android.gms.vision.text.TextRecognizer;
 import com.example.sherrychuang.splitsmart.R;
+import com.example.sherrychuang.splitsmart.Activity.ItemInput;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -82,6 +88,8 @@ public final class OcrCaptureActivity extends AppCompatActivity {
 
     // A TextToSpeech engine for speaking a String value.
     private TextToSpeech tts;
+    private boolean flag = false;
+    ArrayList<ItemInput> itemInputs;
 
     /**
      * Initializes the UI and creates the detector pipeline.
@@ -93,6 +101,7 @@ public final class OcrCaptureActivity extends AppCompatActivity {
 
         mPreview = (CameraSourcePreview) findViewById(R.id.preview);
         mGraphicOverlay = (GraphicOverlay<OcrGraphic>) findViewById(R.id.graphicOverlay);
+        itemInputs = new ArrayList<>();
 
         // Set good defaults for capturing text.
         boolean autoFocus = true;
@@ -128,6 +137,15 @@ public final class OcrCaptureActivity extends AppCompatActivity {
                     }
                 };
         tts = new TextToSpeech(this.getApplicationContext(), listener);
+        //button for saving item and price
+        Button btn = (Button) findViewById(R.id.capture);
+        btn.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View view){
+                Intent myIntent = new Intent(view.getContext(), TestActivityForImage.class);
+                startActivityForResult(myIntent,0);
+            }
+
+        });
     }
 
     /**
@@ -337,7 +355,33 @@ public final class OcrCaptureActivity extends AppCompatActivity {
             if (text != null && text.getValue() != null) {
                 Log.d(TAG, "text data is being spoken! " + text.getValue());
                 // TODO: Speak the string.
-                tts.speak(text.getValue(), TextToSpeech.QUEUE_ADD, null, "DEFAULT");
+                //tts.speak(text.getValue(), TextToSpeech.QUEUE_ADD, null, "DEFAULT");
+                if(flag==false){
+                    List<? extends Text> textComponents = text.getComponents();
+                    for(Text currentText : textComponents) {//loop through all component of block
+                        String s = currentText.getValue();
+                        itemInputs.add(new ItemInput(false, s, ""));
+                        Log.d(TAG, ""+itemInputs.get(itemInputs.size()-1).getItemName());
+                    }
+                    flag = true;
+                    Toast.makeText(getApplicationContext(), "Item saved!", Toast.LENGTH_SHORT).show();
+                } //save item
+                else {
+                    List<? extends Text> textComponents = text.getComponents();
+                    int i = 0;
+                    for (Text currentText : textComponents) {//loop through all component of block
+                        if (i < itemInputs.size()) {
+                            String s = currentText.getValue();
+                            itemInputs.get(i).setPrice(s);
+                            Log.d(TAG, ""+itemInputs.get(i).getPrice());
+
+                            i++;
+                        } else break;
+                    }
+                    flag = false;
+                    Toast.makeText(getApplicationContext(), "Price saved!", Toast.LENGTH_SHORT).show();
+                }
+
             }
             else {
                 Log.d(TAG, "text data is null");
