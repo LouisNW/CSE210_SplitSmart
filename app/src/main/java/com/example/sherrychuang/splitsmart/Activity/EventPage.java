@@ -303,7 +303,6 @@ public class EventPage extends AppCompatActivity {
                 public void onClick(View view){
                     billManager.deleteBill(bills.get(info.position).getId());
                     bills.remove(bills.get(info.position));
-                    billsName.remove(bills.get(info.position));
                     adapter.remove(adapter.getItem(info.position));
                     alertDialog.dismiss();
                 }
