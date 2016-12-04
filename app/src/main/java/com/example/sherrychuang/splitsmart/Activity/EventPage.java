@@ -241,13 +241,18 @@ public class EventPage extends AppCompatActivity {
             taxRateView = (EditText) layout.findViewById(R.id.tax_rate);
             taxRateView.setText(String.valueOf(bill.getTaxRate()));
             ArrayList<String> spinnerArray = new ArrayList<>();
+            int owner_pos = 0;
             for (int i = 0; i < people.size(); i++) {
                 spinnerArray.add(people.get(i).getName());
+                if (bill.getOwnerID() == people.get(i).getId()) {
+                    owner_pos = i;
+                }
             }
             final Spinner spinner = (Spinner) layout.findViewById(R.id.owner);
             ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, spinnerArray);
             spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spinner.setAdapter(spinnerArrayAdapter);
+            spinner.setSelection(owner_pos);
 
             // click ok
             Button okButton = (Button) layout.findViewById(R.id.ok);
