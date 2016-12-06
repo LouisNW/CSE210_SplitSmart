@@ -20,6 +20,7 @@ import java.util.*;
 import com.example.sherrychuang.splitsmart.data.*;
 import com.example.sherrychuang.splitsmart.manager.*;
 import com.example.sherrychuang.splitsmart.R;
+import com.example.sherrychuang.splitsmart.model.CreateSampleDB;
 import com.example.sherrychuang.splitsmart.model.DatabaseTest;
 
 /**
@@ -28,7 +29,7 @@ import com.example.sherrychuang.splitsmart.model.DatabaseTest;
 
 public class MainActivity extends AppCompatActivity {
     private ListView eventListView;
-    private ArrayAdapter adapter;
+    private EventAdapter adapter;
     private List<Event> events;
     private List<String> eventsName;
     private EventManager eventManager;
@@ -36,18 +37,18 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-//        new DatabaseTest(getApplicationContext()).run();
+//        new CreateSampleDB(getApplicationContext()).EraseAll();
+//        new CreateSampleDB(getApplicationContext()).Run();
 
         eventListView = (ListView) findViewById(R.id.event_list);
         eventManager = ManagerFactory.getEventManager(this);
         events = eventManager.getAllEvents();
-        eventsName = new ArrayList<String>();
+        eventsName = new ArrayList<>();
         for(int i = 0; i < events.size(); i++) {
             eventsName.add(events.get(i).getName());
         }
 
-        adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, eventsName);
+        adapter = new EventAdapter(this, eventsName);
         eventListView.setAdapter(adapter);
         registerForContextMenu(eventListView);
         eventListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
