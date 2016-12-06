@@ -37,7 +37,7 @@ import java.util.ArrayList;
 
 public class EventPage extends AppCompatActivity {
     private ListView billListView;
-    private ArrayAdapter adapter;
+    private EventAdapter adapter;
     private List<Bill> bills;
     private List<String> billsName;
     private BillManager billManager;
@@ -91,7 +91,7 @@ public class EventPage extends AppCompatActivity {
             billsName.add(bills.get(i).getName());
         }
 
-        adapter = new ArrayAdapter(this, R.layout.custom_listview_item, billsName);
+        adapter = new EventAdapter(this, billsName);
         billListView.setAdapter(adapter);
         registerForContextMenu(billListView);
 
@@ -258,7 +258,7 @@ public class EventPage extends AppCompatActivity {
                 }
             }
             final Spinner spinner = (Spinner) layout.findViewById(R.id.owner);
-            ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, spinnerArray);
+            ArrayAdapter spinnerArrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, spinnerArray);
             spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spinner.setAdapter(spinnerArrayAdapter);
             spinner.setSelection(owner_pos);
@@ -282,7 +282,7 @@ public class EventPage extends AppCompatActivity {
                         int bill_index = info.position;
                         bills.set(bill_index, bill);
                         billsName.set(bill_index, tempBillName);
-                        adapter = new ArrayAdapter(getApplicationContext(), R.layout.custom_listview_item, billsName);
+                        adapter = new EventAdapter(getApplicationContext(), billsName);
                         billListView.setAdapter(adapter);
                     }
                     alertDialog.dismiss();

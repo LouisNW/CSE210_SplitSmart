@@ -1,10 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/tv"
-    android:textColor="#000000"
-    android:textSize="16dp"
-    android:padding="10dp"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:gravity="left|center" />
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="wrap_content"
+    android:layout_width="fill_parent">
+    <ImageView
+        android:id="@+id/bill_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:gravity="center"
+        android:src="@drawable/ic_assignment"/>
+    <TextView
+        android:id="@+id/item_name"
+        android:textColor="#000000"
+        android:textSize="18sp"
+        android:padding="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_toRightOf="@id/bill_icon" />
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:gravity="center"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/ic_chevron_right"/>
+</RelativeLayout>
