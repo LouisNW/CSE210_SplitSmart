@@ -33,7 +33,9 @@
             android:noHistory="true">
         </activity>
         <activity android:name=".Activity.SplitResultPage">
-
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Activity.MainActivity" />
         </activity>
         <activity android:name=".Activity.BillContentPage">
 
