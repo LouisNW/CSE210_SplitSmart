@@ -41,6 +41,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.cunoraz.tagview.Tag;
 import com.example.sherrychuang.splitsmart.TestActivityForImage;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -360,7 +361,8 @@ public final class OcrCaptureActivity extends AppCompatActivity {
                     List<? extends Text> textComponents = text.getComponents();
                     for(Text currentText : textComponents) {//loop through all component of block
                         String s = currentText.getValue();
-                        itemInputs.add(new ItemInput(false, s, ""));
+                        List<Tag> tmp = new ArrayList<Tag>();
+                        itemInputs.add(new ItemInput(false, s, "", tmp));
                         Log.d(TAG, ""+itemInputs.get(itemInputs.size()-1).getItemName());
                     }
                     flag = true;

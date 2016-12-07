@@ -25,6 +25,7 @@ import android.app.AlertDialog;
 import com.cunoraz.tagview.Tag;
 import com.cunoraz.tagview.TagView;
 
+import com.example.sherrychuang.splitsmart.Ocr.OcrCaptureActivity;
 import com.example.sherrychuang.splitsmart.R;
 import com.example.sherrychuang.splitsmart.data.*;
 import com.example.sherrychuang.splitsmart.manager.*;
@@ -141,15 +142,12 @@ public class EventPage extends AppCompatActivity {
                     // click camera
                     if (items[i].equals("Camera")) {
                         // Go to Camera
+                        Intent myIntent = new Intent(EventPage.this, OcrCaptureActivity.class);
+                        EventPage.this.startActivity(myIntent);
                         Toast toast = Toast.makeText(getApplicationContext(), items[i], Toast.LENGTH_SHORT);
                         toast.show();
                     }
-                    // click gallery
-                    else if (items[i].equals("Gallery")) {
-                        // Go to gallery
-                        Toast toast = Toast.makeText(getApplicationContext(), items[i], Toast.LENGTH_SHORT);
-                        toast.show();
-                    }
+
                     // click manual
                     else if (items[i].equals("Manual")) {
                         // directly go to createBillPage
