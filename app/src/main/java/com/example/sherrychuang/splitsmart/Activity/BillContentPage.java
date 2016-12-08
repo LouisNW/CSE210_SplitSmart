@@ -70,6 +70,12 @@ public class BillContentPage extends AppCompatActivity {
         //Get the information of event, bill and person, and initial the itemManager
         bill = (Bill)intent.getSerializableExtra("Bill");
         event = (Event)intent.getSerializableExtra("Event");
+
+        //Get items from image-parse-to-text
+        myItems = (List<ItemInput>) intent.getSerializableExtra("ItemInput");
+        if(myItems == null)
+            myItems = new ArrayList<ItemInput>();
+
         billManager = ManagerFactory.getBillManager(this);
         person = billManager.getSharingPersonsOfBill(bill.getId());
         itemManager  = ManagerFactory.getItemManager(this);
@@ -82,8 +88,6 @@ public class BillContentPage extends AppCompatActivity {
         }
         personSelectIndex = new ArrayList<List<Integer>>();
 
-        //TODO:Get items from image-parse-to-text
-        myItems = new ArrayList<ItemInput>();
 
         //Set the custom adapter
         myList = (ListView) findViewById(R.id.MyList);
