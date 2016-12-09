@@ -48,7 +48,7 @@ public class SplitResultPage extends AppCompatActivity {
                 SplitResultPage.this.startActivity(myIntent);
             }
         });
-        adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, Result);
+        adapter = new ArrayAdapter(this, R.layout.result_listview, Result);
         resultListView.setAdapter(adapter);
         registerForContextMenu(resultListView);
     }

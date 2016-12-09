@@ -31,6 +31,7 @@ import com.example.sherrychuang.splitsmart.manager.*;
 
 import java.util.ArrayList;
 
+
 /**
  * Created by sherrychuang on 11/15/16.
  */
@@ -75,7 +76,7 @@ public class EventPage extends AppCompatActivity {
         ArrayList<Tag> pNameTag = new ArrayList<>();
         for (int i = 0; i < people.size(); i++) {
             Tag tag = new Tag(people.get(i).getName());
-            tag.layoutColor = Color.BLUE;
+            tag.layoutColor = Color.GRAY;
             tag.isDeletable = false;
             tag.tagTextSize = 15;
             tag.radius = 15;
@@ -186,7 +187,7 @@ public class EventPage extends AppCompatActivity {
                     if (tempName.length() > 0 && tempEmail.length() > 0) {
                         // update tag
                         Tag tag = new Tag(tempName);
-                        tag.layoutColor = Color.BLUE;
+                        tag.layoutColor = Color.GRAY;
                         tag.isDeletable = false;
                         tag.tagTextSize = 15;
                         tag.radius = 15;

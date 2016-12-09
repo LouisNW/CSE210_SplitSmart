@@ -12,7 +12,7 @@
         android:layout_marginLeft="4dp"
         android:layout_marginRight="4dp"
         android:layout_marginBottom="4dp"
-        android:hint="name" />
+        android:hint="Name" />
     <EditText
         android:id="@+id/person_email"
         android:inputType="textEmailAddress"
@@ -22,7 +22,7 @@
         android:layout_marginLeft="4dp"
         android:layout_marginRight="4dp"
         android:layout_marginBottom="16dp"
-        android:hint="email"/>
+        android:hint="Email"/>
     <LinearLayout
         style="?android:attr/buttonBarStyle"
         android:layout_width="match_parent"

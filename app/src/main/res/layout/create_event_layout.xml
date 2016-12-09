@@ -88,16 +88,21 @@
             style="?android:attr/buttonBarButtonStyle"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:text="Cancel" />
+            android:layout_weight="1"
+            android:textStyle="bold"
+            android:text="CANCEL"
+            android:layout_alignParentBottom="true"/>
 
         <Button
             android:id="@+id/ok"
             style="?android:attr/buttonBarButtonStyle"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:text="OK" />
+            android:layout_weight="1"
+            android:textStyle="bold"
+            android:text="SAVE"
+            android:layout_alignParentBottom="true"/>
+
     </LinearLayout>
 </RelativeLayout>
 

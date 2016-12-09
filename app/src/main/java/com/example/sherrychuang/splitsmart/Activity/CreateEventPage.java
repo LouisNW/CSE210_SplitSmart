@@ -59,7 +59,7 @@ public class CreateEventPage extends Activity {
     private DatePickerDialog.OnDateSetListener endDatePickListener = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker view, int year, int month, int day) {
-            endDateView.setText("End Date: " + (month + 1) + "/" + day + "/" + year);
+            endDateView.setText("End Date:  " + (month + 1) + "/" + day + "/" + year);
             endDate.setMonth(month + 1);
             endDate.setDay(day);
         }

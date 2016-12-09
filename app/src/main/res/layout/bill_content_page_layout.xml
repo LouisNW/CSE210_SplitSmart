@@ -68,16 +68,6 @@
             android:paddingRight="20dp" >
 
             <Button
-                android:id="@+id/setup_macroSavebtn"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                android:layout_weight="1"
-                android:text="SAVE"
-                android:textStyle="bold"
-                android:layout_alignParentBottom="true"/>
-
-            <Button
                 android:id="@+id/setup_macroCancelbtn"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -85,7 +75,21 @@
                 android:layout_weight="1"
                 android:text="CANCEL"
                 android:textStyle="bold"
-                android:layout_alignParentBottom="true"/>
+                android:layout_alignParentBottom="true"
+                android:background="?android:attr/colorBackground"
+                android:textColor="@color/colorAccent" />
+
+            <Button
+                android:id="@+id/setup_macroSavebtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_weight="1"
+                android:text="SAVE"
+                android:textStyle="bold"
+                android:layout_alignParentBottom="true"
+                android:background="?android:attr/colorBackground"
+                android:textColor="?android:attr/colorAccent" />
 
         </LinearLayout>
 

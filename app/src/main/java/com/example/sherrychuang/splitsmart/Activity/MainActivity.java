@@ -60,7 +60,6 @@ public class MainActivity extends AppCompatActivity {
                 MainActivity.this.startActivity(myIntent);
             }
         });
-
     }
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         if (v.getId() == R.id.event_list) {
@@ -124,6 +123,13 @@ public class MainActivity extends AppCompatActivity {
             Intent myIntent = new Intent(MainActivity.this, CreateEventPage.class);
             MainActivity.this.startActivity(myIntent);
         }
+        return;
+    }
+    public void onBackPressed() {
+        Intent myIntent = new Intent(MainActivity.this, MainPage.class);
+        myIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);// clear back stack
+        startActivity(myIntent);
+        finish();
         return;
     }
 

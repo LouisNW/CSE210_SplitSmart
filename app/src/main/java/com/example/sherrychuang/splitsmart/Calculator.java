@@ -68,7 +68,7 @@ public class Calculator {
         payer = new HashMap<Person, Double>();
         for(int i = 0; i < peoplelist.size(); i++) {
             String str = peoplelist.get(i).getName();
-            double price = money.get(peoplelist.get(i).getId());
+            double price = (double) Math.round(money.get(peoplelist.get(i).getId())*100)/100;
             if(price >= 0) {
                 str += " should be paid " + Double.toString(price) + " dollars.";
                 payee.put(peoplelist.get(i), price);
@@ -95,8 +95,8 @@ public class Calculator {
             double pay = payer.get(payerlist.get(0));
             double bepaid = payee.get(payeelist.get(0));
             double price = Math.min(pay, bepaid);
-            payer.put(payerlist.get(0), payer.get(payerlist.get(0)) - price);
-            payee.put(payeelist.get(0), payee.get(payeelist.get(0)) - price);
+            payer.put(payerlist.get(0), (double) Math.round((payer.get(payerlist.get(0)) - price)*100)/100.0);
+            payee.put(payeelist.get(0), (double) Math.round((payee.get(payeelist.get(0)) - price)*100)/100.0);
             if(price > 0) {
                 String str = payerlist.get(0).getName() + " should pay " + payeelist.get(0).getName() + " " + price + " dollars.";
                 result_2.add(str);
