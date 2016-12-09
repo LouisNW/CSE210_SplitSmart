@@ -14,7 +14,6 @@
         <activity android:name=".Activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -45,10 +44,12 @@
         <activity android:name=".Activity.EditBillContentPage">
 
         </activity>
-        <activity android:name=".TestActivityForImage">
+        <activity android:name=".Activity.TestActivityForImage">
 
         </activity>
-        <activity android:name=".Ocr.OcrCaptureActivity"></activity>
+        <activity android:name=".Activity.OcrCaptureActivity">
+
+        </activity>
     </application>
 
 </manifest>

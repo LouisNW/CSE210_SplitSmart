@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.sherrychuang.splitsmart.Ocr;
+package com.example.sherrychuang.splitsmart.Activity;
 import android.util.Log;
 import android.util.SparseArray;
 
-import com.example.sherrychuang.splitsmart.Ocr.ui.camera.GraphicOverlay;
+import com.example.sherrychuang.splitsmart.Activity.ui.GraphicOverlay;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.text.TextBlock;
 

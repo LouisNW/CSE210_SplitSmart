@@ -25,7 +25,6 @@ import android.app.AlertDialog;
 import com.cunoraz.tagview.Tag;
 import com.cunoraz.tagview.TagView;
 
-import com.example.sherrychuang.splitsmart.Ocr.OcrCaptureActivity;
 import com.example.sherrychuang.splitsmart.R;
 import com.example.sherrychuang.splitsmart.data.*;
 import com.example.sherrychuang.splitsmart.manager.*;
@@ -101,8 +100,8 @@ public class EventPage extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 CharSequence text = personManager.getPerson(bills.get(i).getOwnerID()).getName();
-                Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
-                toast.show();
+                //Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
+                //toast.show();
 
                 // go to edit bill content page
                 Intent myIntent = new Intent(EventPage.this, EditBillContentPage.class);
@@ -117,7 +116,7 @@ public class EventPage extends AppCompatActivity {
         final Button split_button = (Button) findViewById(R.id.split);
         split_button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "go to split smart!", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), "go to split smart!", Toast.LENGTH_SHORT).show();
                 Intent myIntent = new Intent(EventPage.this, SplitResultPage.class);
                 myIntent.putExtra("Event", event);
                 EventPage.this.startActivity(myIntent);
@@ -134,7 +133,7 @@ public class EventPage extends AppCompatActivity {
         int itemId = item.getItemId();
         // click create bill icon on top, generate a dialog for user to choose camera, gallery, manual, or cancel
         if (itemId == R.id.addBill) {
-            final CharSequence[] items = {"Camera", "Gallery", "Manual", "Cancel"};
+            final CharSequence[] items = {"Camera", "Manual", "Cancel"};
 
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setItems(items, new DialogInterface.OnClickListener() {
@@ -143,16 +142,17 @@ public class EventPage extends AppCompatActivity {
                     if (items[i].equals("Camera")) {
                         // Go to Camera
                         Intent myIntent = new Intent(EventPage.this, OcrCaptureActivity.class);
+                        myIntent.putExtra("event", event);
                         EventPage.this.startActivity(myIntent);
-                        Toast toast = Toast.makeText(getApplicationContext(), items[i], Toast.LENGTH_SHORT);
-                        toast.show();
+                        //Toast toast = Toast.makeText(getApplicationContext(), items[i], Toast.LENGTH_SHORT);
+                        //toast.show();
                     }
 
                     // click manual
                     else if (items[i].equals("Manual")) {
                         // directly go to createBillPage
-                        Toast toast = Toast.makeText(getApplicationContext(), items[i], Toast.LENGTH_SHORT);
-                        toast.show();
+                        //Toast toast = Toast.makeText(getApplicationContext(), items[i], Toast.LENGTH_SHORT);
+                        //toast.show();
                         Intent myIntent = new Intent(EventPage.this, BillPage.class);
                         myIntent.putExtra("Event", event);
                         EventPage.this.startActivity(myIntent);
@@ -204,7 +204,7 @@ public class EventPage extends AppCompatActivity {
             Button cancelButton = (Button) layout.findViewById(R.id.cancel);
             cancelButton.setOnClickListener(new View.OnClickListener(){
                 public void onClick(View view){
-                    Toast.makeText(getApplicationContext(), "add friend cancel", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext(), "add friend cancel", Toast.LENGTH_SHORT).show();
                     alertDialog.cancel();
                 }
             });

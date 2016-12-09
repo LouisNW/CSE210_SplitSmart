@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.sherrychuang.splitsmart.Ocr.ui.camera;
+package com.example.sherrychuang.splitsmart.Activity.ui;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;

@@ -83,7 +83,7 @@ public class CreateEventPage extends Activity {
                 view.remove(position);
                 peopleName.remove(position);
                 peopleEmail.remove(position);
-                Toast.makeText(getApplicationContext(), "#people " + Integer.toString(peopleName.size()), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), "#people " + Integer.toString(peopleName.size()), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -99,14 +99,14 @@ public class CreateEventPage extends Activity {
             @Override
             public void onClick(View v) {
                 new DatePickerDialog(CreateEventPage.this, startDatePickListener, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
-                Toast.makeText(getApplicationContext(), "start", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), "start", Toast.LENGTH_SHORT).show();
             }
         });
         endDateView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 new DatePickerDialog(CreateEventPage.this, endDatePickListener, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
-                Toast.makeText(getApplicationContext(), "end", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), "end", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -149,7 +149,7 @@ public class CreateEventPage extends Activity {
                             peopleName.add(personNameView.getText().toString());
                             peopleEmail.add(personEmailView.getText().toString());
                         }
-                        Toast.makeText(getApplicationContext(), "#friend " + Integer.toString(peopleName.size()), Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getApplicationContext(), "#friend " + Integer.toString(peopleName.size()), Toast.LENGTH_SHORT).show();
                         alertDialog.dismiss();
                     }
                 });
@@ -157,12 +157,12 @@ public class CreateEventPage extends Activity {
                 Button cancelButton = (Button) layout.findViewById(R.id.cancel);
                 cancelButton.setOnClickListener(new View.OnClickListener(){
                     public void onClick(View view){
-                        Toast.makeText(getApplicationContext(), "add friend cancel", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getApplicationContext(), "add friend cancel", Toast.LENGTH_SHORT).show();
                         alertDialog.cancel();
                     }
                 });
 
-                Toast.makeText(getApplicationContext(), "add friend", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), "add friend", Toast.LENGTH_SHORT).show();
             }
         });
 

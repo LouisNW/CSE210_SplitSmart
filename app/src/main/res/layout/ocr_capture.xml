@@ -8,23 +8,23 @@
     android:keepScreenOn="true"
     android:orientation="vertical">
 
-    <com.example.sherrychuang.splitsmart.Ocr.ui.camera.CameraSourcePreview
+    <com.example.sherrychuang.splitsmart.Activity.ui.CameraSourcePreview
         android:id="@+id/preview"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.example.sherrychuang.splitsmart.Ocr.ui.camera.GraphicOverlay
+        <com.example.sherrychuang.splitsmart.Activity.ui.GraphicOverlay
             android:id="@+id/graphicOverlay"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-    </com.example.sherrychuang.splitsmart.Ocr.ui.camera.CameraSourcePreview>
+    </com.example.sherrychuang.splitsmart.Activity.ui.CameraSourcePreview>
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="done"
-        android:id="@+id/capture"
+        android:id="@+id/done"
         android:gravity="center"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />

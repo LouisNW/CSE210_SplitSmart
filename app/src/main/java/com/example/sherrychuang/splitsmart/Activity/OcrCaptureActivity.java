@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.sherrychuang.splitsmart.Ocr;
+package com.example.sherrychuang.splitsmart.Activity;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -26,7 +26,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.hardware.Camera;
-import android.os.Build;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.support.annotation.NonNull;
@@ -42,18 +41,18 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.cunoraz.tagview.Tag;
-import com.example.sherrychuang.splitsmart.TestActivityForImage;
+import com.example.sherrychuang.splitsmart.data.Event;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.common.api.CommonStatusCodes;
-import com.example.sherrychuang.splitsmart.Ocr.ui.camera.CameraSource;
-import com.example.sherrychuang.splitsmart.Ocr.ui.camera.CameraSourcePreview;
-import com.example.sherrychuang.splitsmart.Ocr.ui.camera.GraphicOverlay;
+import com.example.sherrychuang.splitsmart.Activity.ui.CameraSource;
+import com.example.sherrychuang.splitsmart.Activity.ui.CameraSourcePreview;
+import com.example.sherrychuang.splitsmart.Activity.ui.GraphicOverlay;
 import com.google.android.gms.vision.text.Text;
 import com.google.android.gms.vision.text.TextBlock;
 import com.google.android.gms.vision.text.TextRecognizer;
 import com.example.sherrychuang.splitsmart.R;
-import com.example.sherrychuang.splitsmart.Activity.ItemInput;
+
+import junit.framework.Test;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -91,6 +90,10 @@ public final class OcrCaptureActivity extends AppCompatActivity {
     private TextToSpeech tts;
     private boolean flag = false;
     ArrayList<ItemInput> itemInputs;
+    ArrayList<ItemInput> itemInputsTest;
+    String[] ItemAr;
+    String[] PriceAr;
+    Event e;
 
     /**
      * Initializes the UI and creates the detector pipeline.
@@ -103,8 +106,21 @@ public final class OcrCaptureActivity extends AppCompatActivity {
         mPreview = (CameraSourcePreview) findViewById(R.id.preview);
         mGraphicOverlay = (GraphicOverlay<OcrGraphic>) findViewById(R.id.graphicOverlay);
         itemInputs = new ArrayList<>();
-
+        e = (Event) getIntent().getSerializableExtra("event");
+        itemInputsTest = new ArrayList<>();
+        String s = "Apple";
+        List<Tag> tmp = new ArrayList<Tag>();
+        itemInputsTest.add(new ItemInput(false, s, "", tmp));
         // Set good defaults for capturing text.
+        itemInputsTest.get(0).setPrice("2");
+
+        ItemAr=new String[itemInputs.size()];
+        PriceAr=new String[itemInputs.size()];
+        for(int j=0; j<itemInputs.size();j++){
+            ItemAr[j]=itemInputs.get(j).getItemName();
+            PriceAr[j]=itemInputs.get(j).getPrice();
+        }
+
         boolean autoFocus = true;
         boolean useFlash = false;
 
@@ -119,10 +135,6 @@ public final class OcrCaptureActivity extends AppCompatActivity {
 
         gestureDetector = new GestureDetector(this, new CaptureGestureListener());
         scaleGestureDetector = new ScaleGestureDetector(this, new ScaleListener());
-
-        Snackbar.make(mGraphicOverlay, "Tap to Speak. Pinch/Stretch to zoom",
-                Snackbar.LENGTH_LONG)
-                .show();
 
         // TODO: Set up the Text To Speech engine.
         TextToSpeech.OnInitListener listener =
@@ -139,11 +151,23 @@ public final class OcrCaptureActivity extends AppCompatActivity {
                 };
         tts = new TextToSpeech(this.getApplicationContext(), listener);
         //button for saving item and price
-        Button btn = (Button) findViewById(R.id.capture);
+        Button btn = (Button) findViewById(R.id.done);
         btn.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
-                Intent myIntent = new Intent(view.getContext(), TestActivityForImage.class);
-                startActivityForResult(myIntent,0);
+                Log.d("OcrCaptureActivity", "done");
+                Intent myIntent = new Intent(OcrCaptureActivity.this, BillPage.class);
+                myIntent.putExtra("Event",e);
+                myIntent.putExtra("ItemInput", ItemAr);
+                myIntent.putExtra("PriceInput", PriceAr);
+                onPause();
+                OcrCaptureActivity.this.startActivity(myIntent);
+
+                /*if(itemInputs!=null) {
+                    Intent myIntent = new Intent(view.getContext(), BillContentPage.class);
+                    myIntent.putExtra("ItemInput", itemInputsTest);
+                    OcrCaptureActivity.this.startActivity(myIntent);
+                }*/
+
             }
 
         });
@@ -246,8 +270,10 @@ public final class OcrCaptureActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        Log.d("OcrCaptureActivity","enter onPause");
         if (mPreview != null) {
             mPreview.stop();
+            Log.d("OcrCaptureActivity", "stop");
         }
     }
 
@@ -382,7 +408,14 @@ public final class OcrCaptureActivity extends AppCompatActivity {
                     }
                     flag = false;
                     Toast.makeText(getApplicationContext(), "Price saved!", Toast.LENGTH_SHORT).show();
+                    ItemAr=new String[itemInputs.size()];
+                    PriceAr=new String[itemInputs.size()];
+                    for(int j=0; j<itemInputs.size();j++){
+                        ItemAr[j]=itemInputs.get(j).getItemName();
+                        PriceAr[j]=itemInputs.get(j).getPrice();
+                    }
                 }
+
 
             }
             else {

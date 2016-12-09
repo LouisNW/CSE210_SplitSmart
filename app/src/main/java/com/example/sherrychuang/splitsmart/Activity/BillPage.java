@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.LayoutInflater;
 import android.view.WindowManager;
@@ -36,6 +37,8 @@ public class BillPage extends Activity {
     private BillManager billManager;
     private Event event;
     private String billName;
+    String[] myItemAr;
+    String[] myPriceAr;
 
 
     @Override
@@ -44,6 +47,12 @@ public class BillPage extends Activity {
         Intent intent = getIntent();
         setContentView(R.layout.bill_page_layout);
 
+        myItemAr = (String[]) intent.getSerializableExtra("ItemInput");
+        if(myItemAr!=null) {
+            Log.d("BillPage", "ItemInput: "+myItemAr.length);
+            myPriceAr = (String[]) intent.getSerializableExtra("PriceInput");
+            Log.d("BillPage", "PriceInput: " + myPriceAr.length);
+        }
         //Instantiates a layout XML file into the View object alertLayout
         LayoutInflater inflater = getLayoutInflater();
         View alertLayout = inflater.inflate(R.layout.bill_dialog, null);
@@ -76,9 +85,12 @@ public class BillPage extends Activity {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(getBaseContext(), "Cancel clicked", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getBaseContext(), "Cancel clicked", Toast.LENGTH_SHORT).show();
                 //Back to the Event page
-                finish();
+                Intent myIntent = new Intent(BillPage.this, EventPage.class);
+                myIntent.putExtra("Event", event);
+                BillPage.this.startActivity(myIntent);
+
             }
         });
 
@@ -137,8 +149,10 @@ public class BillPage extends Activity {
                     Intent myIntent = new Intent(((Dialog) dialog).getContext(), BillContentPage.class);
                     myIntent.putExtra("Bill", bill2Insert);
                     myIntent.putExtra("Event", event);
+                    myIntent.putExtra("ItemInput", myItemAr);
+                    myIntent.putExtra("PriceInput", myPriceAr);
                     BillPage.this.startActivity(myIntent);
-                    Toast.makeText(getBaseContext(), "Bill Name: " + billName + " Pos: " + selectPos, Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getBaseContext(), "Bill Name: " + billName + " Pos: " + selectPos, Toast.LENGTH_SHORT).show();
                 }
             }
         });

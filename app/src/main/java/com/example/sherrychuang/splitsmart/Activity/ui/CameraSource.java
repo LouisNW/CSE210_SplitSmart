@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.sherrychuang.splitsmart.Ocr.ui.camera;
+package com.example.sherrychuang.splitsmart.Activity.ui;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -432,6 +432,7 @@ public class CameraSource {
                 }
                 mCamera.release();
                 mCamera = null;
+                Log.d("CameraSource", "null");
             }
         }
     }
