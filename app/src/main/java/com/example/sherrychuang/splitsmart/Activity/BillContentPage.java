@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -70,6 +71,17 @@ public class BillContentPage extends AppCompatActivity {
         //Get the information of event, bill and person, and initial the itemManager
         bill = (Bill)intent.getSerializableExtra("Bill");
         event = (Event)intent.getSerializableExtra("Event");
+        //Get items from image-parse-to-text
+
+        personSelectIndex = new ArrayList<List<Integer>>();
+        String[] myItemAr = (String[]) intent.getSerializableExtra("ItemInput");
+        String[] myPriceAr = (String[]) intent.getSerializableExtra("PriceInput");
+        myItems = new ArrayList<ItemInput>();
+        if(myItemAr!=null) {
+            for (int i = 0; i < myItemAr.length && i < myPriceAr.length; i++) {
+                addNewItem(false, myItemAr[i], myPriceAr[i]);
+            }
+        }
         billManager = ManagerFactory.getBillManager(this);
         person = billManager.getSharingPersonsOfBill(bill.getId());
         itemManager  = ManagerFactory.getItemManager(this);
@@ -80,27 +92,13 @@ public class BillContentPage extends AppCompatActivity {
         for(Person p: person) {
             eventPeopleList.add(p.getName());
         }
-        personSelectIndex = new ArrayList<List<Integer>>();
 
-        //TODO:Get items from image-parse-to-text
-        myItems = new ArrayList<ItemInput>();
 
         //Set the custom adapter
         myList = (ListView) findViewById(R.id.MyList);
         myList.setItemsCanFocus(true);
         myAdapter = new BillAdapter();
         myList.setAdapter(myAdapter);
-
-        //Store items from myItems to listView
-        if(myItems.size() != 0){
-            for (int i = 0; i < myItems.size(); i++){
-                boolean inputItemTax  = myItems.get(i).getTax();
-                String inputItemName = myItems.get(i).getItemName();
-                String inputItemPrice = myItems.get(i).getPrice();
-                addNewItem(inputItemTax,inputItemName, inputItemPrice);
-            }
-        }
-
 
         //Set a button for SAVE
         final Button save = (Button) findViewById(R.id.setup_macroSavebtn);
@@ -151,7 +149,7 @@ public class BillContentPage extends AppCompatActivity {
                 //Get the tax rate and store it to db in Bill
                 EditText taxRate = (EditText) findViewById(R.id.ItemTax);
                 String taxInput = taxRate.getText().toString();
-                Toast.makeText(getBaseContext(), "Tax rate: " + taxInput, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getBaseContext(), "Tax rate: " + taxInput, Toast.LENGTH_SHORT).show();
                 double taxRateVal;
                 try
                 {
@@ -162,12 +160,12 @@ public class BillContentPage extends AppCompatActivity {
                     taxRateVal = 0;
                 }
 
-                Toast.makeText(getBaseContext(), "Tax rate: " + taxRateVal, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getBaseContext(), "Tax rate: " + taxRateVal, Toast.LENGTH_SHORT).show();
 
                 if(flagEmptyCheck == false) {
                     bill.setTaxRate(taxRateVal);
                     billManager.updateBill(bill);
-                    Toast.makeText(getBaseContext(), "Tax rate: " + taxRateVal, Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getBaseContext(), "Tax rate: " + taxRateVal, Toast.LENGTH_SHORT).show();
                     //finish();
                     Intent myIntent = new Intent(BillContentPage.this, EventPage.class);
                     myIntent.putExtra("Event", event);
@@ -265,7 +263,7 @@ public class BillContentPage extends AppCompatActivity {
                         ItemInput myThisItem = myItems.get(position);
                         String editResult = Caption.getText().toString();
                         myThisItem.setItemName(editResult);
-                        Toast.makeText(getBaseContext(), "Name " + position + " is " + editResult, Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getBaseContext(), "Name " + position + " is " + editResult, Toast.LENGTH_SHORT).show();
                     }
                 }
             });
@@ -278,7 +276,7 @@ public class BillContentPage extends AppCompatActivity {
                         ItemInput myThisItem = myItems.get(position);
                         String editResult = Caption.getText().toString();
                         myThisItem.setPrice(editResult);
-                        Toast.makeText(getBaseContext(), "Price " + position + " is " + editResult, Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getBaseContext(), "Price " + position + " is " + editResult, Toast.LENGTH_SHORT).show();
                     }
                 }
             });
@@ -290,7 +288,8 @@ public class BillContentPage extends AppCompatActivity {
                     ItemInput myThisItem = myItems.get(position);
                     boolean checkRes = cb.isChecked();
                     myThisItem.setTax(checkRes);
-                    Toast.makeText(getBaseContext(), "Tax " + position + " is " + checkRes, Toast.LENGTH_SHORT).show();
+                    //
+                    // Toast.makeText(getBaseContext(), "Tax " + position + " is " + checkRes, Toast.LENGTH_SHORT).show();
                 }
             });
 

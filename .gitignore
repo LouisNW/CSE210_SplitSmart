@@ -32,9 +32,10 @@ proguard/
 # Android Studio captures folder
 captures/
 
-# Intellij
+
 *.iml
 .idea/
+<<<<<<< ac89ea35f8c505ea23746f1eeec6b6cb6674dcf1
 .idea/libraries/
 .idea/workspace.xml
 .idea/tasks.xml
@@ -43,9 +44,12 @@ captures/
 .idea/copyright/profiles_settings.xml
 .idea/encodings.xml
 .idea/misc.xml
-.idea/modules.xml
-.idea/scopes/scope_settings.xml
-.idea/vcs.xml
+
+
+
+=======
+.idea/misc.xml
+>>>>>>> realtime show blocks and user capture function
 
 # Keystore files
 *.jks
